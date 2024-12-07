@@ -16,7 +16,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class UserCreateRequest {
-
     String fullName;
 
     @NotBlank(message = "Phone number is required")
