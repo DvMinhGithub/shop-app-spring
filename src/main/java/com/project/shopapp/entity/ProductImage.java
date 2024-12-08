@@ -1,8 +1,10 @@
 package com.project.shopapp.entity;
 
-import java.sql.Date;
-
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,27 +16,14 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-@Entity
-public class User {
+public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String fullName;
-
-    @Column(nullable = false, length = 10)
-    String phoneNumber;
-
-    String address;
-
     @Column(nullable = false)
-    String password;
-
-    boolean isActive;
-    Date dateOfBirth;
-    int facebookAccountId;
-    int googleAccountId;
+    String imageUrl;
 
     @ManyToOne
-    Role role;
+    Product product;
 }

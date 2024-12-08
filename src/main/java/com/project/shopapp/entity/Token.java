@@ -1,8 +1,12 @@
 package com.project.shopapp.entity;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,26 +19,18 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 @Entity
-public class User {
+public class Token {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String fullName;
-
-    @Column(nullable = false, length = 10)
-    String phoneNumber;
-
-    String address;
-
-    @Column(nullable = false)
-    String password;
-
-    boolean isActive;
-    Date dateOfBirth;
-    int facebookAccountId;
-    int googleAccountId;
+    String token;
+    String tokenType;
+    String email;
+    LocalDateTime expiryDate;
+    boolean revoked;
+    String expried;
 
     @ManyToOne
-    Role role;
+    User user;
 }
