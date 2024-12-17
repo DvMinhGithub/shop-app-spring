@@ -1,3 +1,9 @@
+INSERT INTO roles (name) VALUES
+('Admin'),
+('User'),
+('Moderator'),
+('Guest');
+
 INSERT INTO categories (name) VALUES
 ('Điện tử'), 
 ('Sách'),

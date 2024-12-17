@@ -52,6 +52,35 @@ CREATE TABLE products(
     category_id INT
 );
 
+CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    fullname VARCHAR(100) DEFAULT '',
+    email VARCHAR(100) DEFAULT '',
+    phone_number VARCHAR(20) NOT NULL,
+    address VARCHAR(200) NOT NULL,
+    note VARCHAR(100) DEFAULT '',
+    order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status enum('PENDING', 'SHIPPING', 'DELIVERED', 'CANCELED') DEFAULT 'PENDING',
+    total_money FLOAT CHECK(total_money >= 0),
+    shipping_method VARCHAR(50),
+    shipping_address VARCHAR(200),
+    shipping_date DATE,
+    tracking_number VARCHAR(50),
+    payment_method VARCHAR(50),
+    is_active TINYINT(1) DEFAULT 1
+);
+
+CREATE TABLE order_details(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    order_id INT,
+    product_id INT,
+    price FLOAT CHECK(price >= 0),
+    number_of_products INT CHECK(number_of_products > 0),
+    total_money FLOAT CHECK(total_money >= 0),
+    color VARCHAR(20) DEFAULT ''
+);
+
 -- FOREIGN KEY
 
 ALTER TABLE users
@@ -65,3 +94,12 @@ ADD FOREIGN KEY (user_id) REFERENCES users(id);
 
 ALTER TABLE products
 ADD FOREIGN KEY (category_id) REFERENCES categories(id);
+
+ALTER TABLE orders
+ADD FOREIGN KEY (user_id) REFERENCES users(id);
+
+ALTER TABLE order_details
+ADD FOREIGN KEY (order_id) REFERENCES orders(id);
+
+ALTER TABLE order_details
+ADD FOREIGN KEY (product_id) REFERENCES products(id);
