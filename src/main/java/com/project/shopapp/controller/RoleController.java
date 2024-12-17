@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.shopapp.dto.request.RoleRequest;
 import com.project.shopapp.dto.response.ApiResponse;
 import com.project.shopapp.entity.Role;
-import com.project.shopapp.service.RoleService;
+import com.project.shopapp.service.impl.RoleServiceImpl;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 public class RoleController {
-    RoleService roleService;
+    RoleServiceImpl roleService;
 
     @PostMapping
     public ApiResponse<Role> createRole(@RequestBody @Valid RoleRequest request) {

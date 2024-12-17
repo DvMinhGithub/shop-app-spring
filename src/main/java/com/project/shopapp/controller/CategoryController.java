@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.project.shopapp.dto.request.CategoryRequest;
 import com.project.shopapp.dto.response.ApiResponse;
 import com.project.shopapp.entity.Category;
-import com.project.shopapp.service.CategoryService;
+import com.project.shopapp.service.impl.CategoryServiceImpl;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/category")
 public class CategoryController {
-    private final CategoryService categoryService;
+    private final CategoryServiceImpl categoryService;
 
     @GetMapping
     public ApiResponse<List<Category>> getAllCategories() {

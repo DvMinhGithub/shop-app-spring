@@ -1,4 +1,4 @@
-package com.project.shopapp.service;
+package com.project.shopapp.service.impl;
 
 import org.springframework.stereotype.Service;
 
@@ -11,6 +11,7 @@ import com.project.shopapp.exception.InvalidPasswordException;
 import com.project.shopapp.mapper.UserMapper;
 import com.project.shopapp.repository.RoleRepository;
 import com.project.shopapp.repository.UserRepository;
+import com.project.shopapp.service.IUserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,7 +19,7 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 @Service
-public class UserService implements IUserService {
+public class UserServiceImpl implements IUserService {
     UserRepository userRepository;
     RoleRepository roleRepository;
     UserMapper userMapper;

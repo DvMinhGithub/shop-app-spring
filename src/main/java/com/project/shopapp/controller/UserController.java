@@ -10,7 +10,7 @@ import com.project.shopapp.dto.request.UserCreateRequest;
 import com.project.shopapp.dto.request.UserLoginRequest;
 import com.project.shopapp.dto.response.ApiResponse;
 import com.project.shopapp.entity.User;
-import com.project.shopapp.service.UserService;
+import com.project.shopapp.service.impl.UserServiceImpl;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import lombok.experimental.FieldDefaults;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    UserService userService;
+    UserServiceImpl userService;
 
     @PostMapping("/login")
     public ApiResponse<String> login(@RequestBody UserLoginRequest request) {
