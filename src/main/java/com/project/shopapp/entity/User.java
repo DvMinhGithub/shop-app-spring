@@ -17,6 +17,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,5 +39,6 @@ public class User {
     int googleAccountId;
 
     @ManyToOne
+    @JoinColumn(name = "name")
     Role role;
 }
