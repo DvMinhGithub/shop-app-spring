@@ -52,6 +52,12 @@ CREATE TABLE products(
     category_id INT
 );
 
+CREATE TABLE product_images(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT,
+    image_url VARCHAR(300) NOT NULL
+);
+
 CREATE TABLE orders (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
@@ -94,6 +100,9 @@ ADD FOREIGN KEY (user_id) REFERENCES users(id);
 
 ALTER TABLE products
 ADD FOREIGN KEY (category_id) REFERENCES categories(id);
+
+ALTER TABLE product_images
+ADD FOREIGN KEY (product_id) REFERENCES products(id);
 
 ALTER TABLE orders
 ADD FOREIGN KEY (user_id) REFERENCES users(id);

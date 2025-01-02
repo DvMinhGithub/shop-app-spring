@@ -1,5 +1,9 @@
 package com.project.shopapp.dto.request;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -26,7 +30,7 @@ public class ProductRequest {
     @Max(value = 10000000, message = "Price must be less than 10000000")
     Double price;
 
-    String thumbnail;
+    List<MultipartFile> thumbnail;
 
     Long categoryId;
 }
