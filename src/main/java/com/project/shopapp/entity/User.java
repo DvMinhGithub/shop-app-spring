@@ -39,6 +39,6 @@ public class User {
     int googleAccountId;
 
     @ManyToOne
-    @JoinColumn(name = "name")
+    @JoinColumn(name = "role_id")
     Role role;
 }
