@@ -24,8 +24,12 @@ public class UserController {
     UserServiceImpl userService;
 
     @PostMapping("/login")
-    public ApiResponse<String> login(@RequestBody UserLoginRequest request) {
-        return new ApiResponse<>(HttpStatus.OK.value(), "User logged in successfully", userService.login(request));
+    public ApiResponse<User> login(@RequestBody UserLoginRequest request) {
+        return ApiResponse.<User>builder()
+                .code(HttpStatus.OK.value())
+                .message("User logged in successfully")
+                .result(userService.login(request))
+                .build();
     }
 
     @PostMapping("/register")

@@ -2,6 +2,8 @@ package com.project.shopapp.entity;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +25,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Column(name = "full_name")
     String fullName;
 
     @Column(nullable = false, length = 10)
@@ -31,6 +34,7 @@ public class User {
     String address;
 
     @Column(nullable = false)
+    @JsonIgnore
     String password;
 
     boolean isActive;

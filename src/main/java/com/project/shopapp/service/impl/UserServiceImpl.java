@@ -43,7 +43,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public String login(UserLoginRequest request) {
+    public User login(UserLoginRequest request) {
         String phoneNumber = request.getPhoneNumber();
         String password = request.getPassword();
         User user = userRepository
@@ -52,6 +52,6 @@ public class UserServiceImpl implements IUserService {
         if (!user.getPassword().equals(password)) {
             throw new InvalidPasswordException("Invalid password");
         }
-        return "User logged in successfully";
+        return user;
     }
 }

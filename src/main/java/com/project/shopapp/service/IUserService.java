@@ -7,5 +7,5 @@ import com.project.shopapp.entity.User;
 public interface IUserService {
     User createUser(UserCreateRequest request);
 
-    String login(UserLoginRequest request);
+    User login(UserLoginRequest request);
 }

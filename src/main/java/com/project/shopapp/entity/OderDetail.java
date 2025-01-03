@@ -20,6 +20,7 @@ public class OderDetail {
     long id;
 
     @ManyToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     Order order;
 
     @ManyToOne

@@ -1,6 +1,7 @@
 package com.project.shopapp.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.project.shopapp.enums.Status;
 
@@ -46,4 +47,7 @@ public class Order {
     String trackingNumber;
     String paymentMethod;
     boolean active;
+
+    @OneToMany
+    List<OderDetail> orderDetails;
 }
