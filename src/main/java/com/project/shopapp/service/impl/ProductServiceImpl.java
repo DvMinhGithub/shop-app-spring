@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.shopapp.dto.request.ProductRequest;
+import com.project.shopapp.dto.response.ProductListResponse;
+import com.project.shopapp.dto.response.ProductResponse;
 import com.project.shopapp.entity.Category;
 import com.project.shopapp.entity.Product;
 import com.project.shopapp.entity.ProductImage;
@@ -59,14 +61,33 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public Product getProductById(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Product not found"));
+        Product product =
+                productRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Product not found"));
+        ProductResponse productResponse = productMapper.toProductResponse(product);
+        productResponse.setCategoryId(product.getCategory().getId());
+        productResponse.setThumbnail(
+                product.getThumbnail().stream().map(ProductImage::getImageUrl).toList());
+        return product;
     }
 
     @Override
-    public List<Product> getAllProducts(PageRequest pageRequest) {
-        Page<Product> products = productRepository.findAll(pageRequest);
-        return products.getContent();
-    }
+    public ProductListResponse getAllProducts(Pageable pageRequest) {
+        Page<ProductResponse> products = productRepository.findAll(pageRequest).map(product -> {
+            ProductResponse productResponse = productMapper.toProductResponse(product);
+            productResponse.setCategoryId(product.getCategory().getId());
+            productResponse.setThumbnail(product.getThumbnail().stream()
+                    .map(ProductImage::getImageUrl)
+                    .toList());
+            return productResponse;
+        });
+
+        ProductListResponse productListResponse = ProductListResponse.builder()
+                .products(products.getContent())
+                .totalPages(products.getTotalPages())
+                .build();
+
+        return productListResponse;
+    };
 
     @Override
     public Product updateProduct(Long id, ProductRequest request) {

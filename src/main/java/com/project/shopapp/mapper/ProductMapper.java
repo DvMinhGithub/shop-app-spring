@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.project.shopapp.dto.request.ProductRequest;
+import com.project.shopapp.dto.response.ProductResponse;
 import com.project.shopapp.entity.Product;
 
 @Mapper(componentModel = "spring")
@@ -14,4 +15,8 @@ public interface ProductMapper {
     @Mapping(target = "thumbnail", ignore = true)
     @Mapping(target = "category", ignore = true)
     Product toProduct(ProductRequest request);
+
+    @Mapping(target = "categoryId", ignore = true)
+    @Mapping(target = "thumbnail", ignore = true)
+    ProductResponse toProductResponse(Product product);
 }

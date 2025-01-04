@@ -1,9 +1,9 @@
 package com.project.shopapp.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import com.project.shopapp.dto.request.ProductRequest;
 import com.project.shopapp.dto.response.ApiResponse;
+import com.project.shopapp.dto.response.ProductListResponse;
 import com.project.shopapp.entity.Product;
 import com.project.shopapp.service.impl.ProductServiceImpl;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
@@ -26,10 +26,10 @@ public class ProductController {
     ProductServiceImpl productService;
 
     @GetMapping
-    public ApiResponse<List<Product>> getProducts(@RequestParam int page, @RequestParam int limit) {
-        PageRequest pageRequest =
-                PageRequest.of(page, limit, Sort.by("createdAt").descending());
-        return ApiResponse.<List<Product>>builder()
+    public ApiResponse<ProductListResponse> getProducts(@RequestParam int page, @RequestParam int limit) {
+        Pageable pageRequest =
+                PageRequest.of(page - 1, limit, Sort.by("createdAt").descending());
+        return ApiResponse.<ProductListResponse>builder()
                 .code(HttpStatus.OK.value())
                 .result(productService.getAllProducts(pageRequest))
                 .build();
@@ -44,10 +44,11 @@ public class ProductController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResponse<Product> createProduct(@ModelAttribute @Valid ProductRequest request) throws IOException {
+    public ApiResponse<Product> createProduct(@ModelAttribute ProductRequest request) throws IOException {
+        ProductRequest productRequest = request;
         return ApiResponse.<Product>builder()
                 .code(HttpStatus.CREATED.value())
-                .result(productService.createProduct(request))
+                .result(productService.createProduct(productRequest))
                 .build();
     }
 
