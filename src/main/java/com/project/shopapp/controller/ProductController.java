@@ -13,6 +13,7 @@ import com.github.javafaker.Faker;
 import com.project.shopapp.dto.request.ProductRequest;
 import com.project.shopapp.dto.response.ApiResponse;
 import com.project.shopapp.dto.response.ProductListResponse;
+import com.project.shopapp.dto.response.ProductResponse;
 import com.project.shopapp.entity.Product;
 import com.project.shopapp.service.impl.ProductServiceImpl;
 
@@ -37,8 +38,8 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<Product> getProductById(@PathVariable Long id) {
-        return ApiResponse.<Product>builder()
+    public ApiResponse<ProductResponse> getProductById(@PathVariable Long id) {
+        return ApiResponse.<ProductResponse>builder()
                 .code(HttpStatus.OK.value())
                 .result(productService.getProductById(id))
                 .build();

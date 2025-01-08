@@ -60,14 +60,10 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public Product getProductById(Long id) {
+    public ProductResponse getProductById(Long id) {
         Product product =
                 productRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Product not found"));
-        ProductResponse productResponse = productMapper.toProductResponse(product);
-        productResponse.setCategoryId(product.getCategory().getId());
-        productResponse.setThumbnail(
-                product.getThumbnail().stream().map(ProductImage::getImageUrl).toList());
-        return product;
+        return productMapper.toProductResponse(product);
     }
 
     @Override
