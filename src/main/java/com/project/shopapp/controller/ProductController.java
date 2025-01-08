@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import com.github.javafaker.Faker;
 import com.project.shopapp.dto.request.ProductRequest;
 import com.project.shopapp.dto.response.ApiResponse;
 import com.project.shopapp.dto.response.ProductListResponse;
@@ -66,6 +67,40 @@ public class ProductController {
         return ApiResponse.builder()
                 .code(HttpStatus.NO_CONTENT.value())
                 .message("Product deleted successfully")
+                .build();
+    }
+
+    @PostMapping("/generateFakeProducts")
+    public ApiResponse<?> generateFakeProducts() throws IOException {
+        Faker faker = new Faker();
+
+        for (int i = 0; i < 10; i++) {
+            String name = faker.commerce().productName();
+
+            if (productService.existsByName(name)) {
+                continue;
+            }
+
+            ProductRequest productRequest = ProductRequest.builder()
+                    .name(name)
+                    .description(faker.lorem().sentence())
+                    .price(faker.number().randomDouble(2, 1, 1000000))
+                    .categoryId((long) faker.number().numberBetween(1, 4))
+                    .build();
+            try {
+                productService.createProduct(productRequest);
+            } catch (Exception e) {
+                return ApiResponse.builder()
+                        .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                        .message("Error generating fake products")
+                        .build();
+            }
+            productService.createProduct(productRequest);
+        }
+
+        return ApiResponse.builder()
+                .code(HttpStatus.CREATED.value())
+                .message("Fake products generated successfully")
                 .build();
     }
 }

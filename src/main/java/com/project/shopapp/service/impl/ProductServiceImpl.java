@@ -47,7 +47,7 @@ public class ProductServiceImpl implements IProductService {
         Product savedProduct = productRepository.save(product);
 
         List<MultipartFile> files = request.getThumbnail();
-        if (!files.isEmpty()) {
+        if (files != null && !files.isEmpty()) {
             for (MultipartFile multipartFile : files) {
                 if (multipartFile.isEmpty()) {
                     continue;
@@ -87,7 +87,7 @@ public class ProductServiceImpl implements IProductService {
                 .build();
 
         return productListResponse;
-    };
+    }
 
     @Override
     public Product updateProduct(Long id, ProductRequest request) {
@@ -119,5 +119,9 @@ public class ProductServiceImpl implements IProductService {
         }
 
         return productImageRepository.save(productImage);
+    }
+
+    public boolean existsByName(String name) {
+        return productRepository.existsByName(name);
     }
 }

@@ -1,5 +1,6 @@
 package com.project.shopapp.mapper;
 
+import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -16,6 +17,7 @@ public interface ProductMapper {
     @Mapping(target = "category", ignore = true)
     Product toProduct(ProductRequest request);
 
+    @InheritConfiguration
     @Mapping(target = "categoryId", ignore = true)
     @Mapping(target = "thumbnail", ignore = true)
     ProductResponse toProductResponse(Product product);
