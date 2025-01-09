@@ -1,6 +1,6 @@
 package com.project.shopapp.enums;
 
-public enum Status {
+public enum OrderStatus {
     PENDING,
     SHIPPING,
     DELIVERED,

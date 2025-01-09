@@ -1,8 +1,9 @@
 package com.project.shopapp.dto.request;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
-import com.project.shopapp.enums.Status;
+import com.project.shopapp.enums.OrderStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
@@ -22,6 +23,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class OrderRequest {
+    Long userId;
     String fullName;
     String email;
 
@@ -35,12 +37,13 @@ public class OrderRequest {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) default 'PENDING'")
-    Status status;
+    OrderStatus status;
 
     @Min(value = 0, message = "Total money must be greater than 0")
     float totalMoney;
 
     String shippingMethod;
     String shippingAddress;
+    LocalDateTime shippingDate;
     String paymentMethod;
 }

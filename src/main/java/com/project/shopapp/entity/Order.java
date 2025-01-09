@@ -3,9 +3,13 @@ package com.project.shopapp.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.project.shopapp.enums.Status;
+import com.project.shopapp.enums.OrderStatus;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,27 +31,41 @@ public class Order {
     @ManyToOne
     User user;
 
+    @NotBlank(message = "Full name is required")
     String fullName;
+
+    @Email(message = "Email should be valid")
     String email;
 
-    @Column(length = 10)
+    @Pattern(regexp = "\\d{10}", message = "Phone number must be 10 digits")
     String phoneNumber;
 
+    @NotBlank(message = "Address is required")
     String address;
+
     String note;
+
     LocalDateTime orderDate;
 
     @Enumerated(EnumType.STRING)
-    Status status;
+    OrderStatus status;
 
-    Integer totalMoney;
+    @PositiveOrZero(message = "Total money must be positive or zero")
+    float totalMoney;
+
     String shippingMethod;
     String shippingAddress;
     LocalDateTime shippingDate;
     String trackingNumber;
     String paymentMethod;
-    boolean active;
+    boolean active = true;
 
-    @OneToMany
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     List<OderDetail> orderDetails;
+
+    @PrePersist
+    public void prePersist() {
+        this.orderDate = LocalDateTime.now();
+        this.status = OrderStatus.PENDING;
+    }
 }
