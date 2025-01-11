@@ -1,7 +1,11 @@
 package com.project.shopapp.service.impl;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.project.shopapp.config.JwtConfig;
 import com.project.shopapp.dto.request.UserCreateRequest;
 import com.project.shopapp.dto.request.UserLoginRequest;
 import com.project.shopapp.exception.DataNotFoundException;
@@ -23,6 +27,9 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     RoleRepository roleRepository;
     UserMapper userMapper;
+    PasswordEncoder passwordEncoder;
+    JwtConfig jwtConfig;
+    AuthenticationManager authenticationManager;
 
     @Override
     public User createUser(UserCreateRequest request) {
@@ -36,22 +43,30 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toUser(request);
         user.setRole(role);
         if (request.getGoogleAccountId() == 0 || request.getFacebookAccountId() == 0) {
-            String password = request.getPassword();
+            String password = passwordEncoder.encode(request.getPassword());
             user.setPassword(password);
         }
         return userRepository.save(user);
     }
 
     @Override
-    public User login(UserLoginRequest request) {
+    public String login(UserLoginRequest request) {
         String phoneNumber = request.getPhoneNumber();
         String password = request.getPassword();
         User user = userRepository
                 .findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new DataNotFoundException("User not found"));
-        if (!user.getPassword().equals(password)) {
-            throw new InvalidPasswordException("Invalid password");
+
+        if (user.getGoogleAccountId() != 0 || user.getFacebookAccountId() != 0) {
+            if (!passwordEncoder.matches(password, user.getPassword())) {
+                throw new InvalidPasswordException("Invalid password");
+            }
         }
-        return user;
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(phoneNumber, password);
+        authenticationManager.authenticate(authenticationToken);
+
+        return jwtConfig.generateToken(user);
     }
 }

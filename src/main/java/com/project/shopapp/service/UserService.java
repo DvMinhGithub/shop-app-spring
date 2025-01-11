@@ -7,5 +7,5 @@ import com.project.shopapp.model.User;
 public interface UserService {
     User createUser(UserCreateRequest request);
 
-    User login(UserLoginRequest request);
+    String login(UserLoginRequest request);
 }
