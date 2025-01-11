@@ -3,9 +3,9 @@ package com.project.shopapp.service;
 import java.util.List;
 
 import com.project.shopapp.dto.request.OrderRequest;
-import com.project.shopapp.entity.Order;
+import com.project.shopapp.model.Order;
 
-public interface IOrderService {
+public interface OrderService {
     Order createOrder(OrderRequest request);
 
     List<Order> findByUserId(Long userId);

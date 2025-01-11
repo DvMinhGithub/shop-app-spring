@@ -5,7 +5,7 @@ import org.mapstruct.Mapping;
 
 import com.project.shopapp.dto.request.UserCreateRequest;
 import com.project.shopapp.dto.request.UserLoginRequest;
-import com.project.shopapp.entity.User;
+import com.project.shopapp.model.User;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

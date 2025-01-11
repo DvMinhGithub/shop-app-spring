@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.project.shopapp.dto.request.RoleRequest;
-import com.project.shopapp.entity.Role;
+import com.project.shopapp.model.Role;
 import com.project.shopapp.repository.RoleRepository;
-import com.project.shopapp.service.IRoleService;
+import com.project.shopapp.service.RoleService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
-public class RoleServiceImpl implements IRoleService {
+public class RoleServiceImpl implements RoleService {
     RoleRepository roleRepository;
 
     @Override

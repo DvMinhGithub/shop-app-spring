@@ -11,15 +11,15 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.shopapp.dto.request.ProductRequest;
 import com.project.shopapp.dto.response.ProductListResponse;
 import com.project.shopapp.dto.response.ProductResponse;
-import com.project.shopapp.entity.Category;
-import com.project.shopapp.entity.Product;
-import com.project.shopapp.entity.ProductImage;
 import com.project.shopapp.exception.DataNotFoundException;
 import com.project.shopapp.mapper.ProductMapper;
+import com.project.shopapp.model.Category;
+import com.project.shopapp.model.Product;
+import com.project.shopapp.model.ProductImage;
 import com.project.shopapp.repository.CategoryRepository;
 import com.project.shopapp.repository.ProductImageRepository;
 import com.project.shopapp.repository.ProductRepository;
-import com.project.shopapp.service.IProductService;
+import com.project.shopapp.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -27,7 +27,7 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 @Service
-public class ProductServiceImpl implements IProductService {
+public class ProductServiceImpl implements ProductService {
     CategoryRepository categoryRepository;
     ProductRepository productRepository;
     ProductImageRepository productImageRepository;

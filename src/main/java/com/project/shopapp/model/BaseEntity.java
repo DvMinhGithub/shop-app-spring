@@ -1,4 +1,4 @@
-package com.project.shopapp.entity;
+package com.project.shopapp.model;
 
 import java.time.LocalDateTime;
 

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.project.shopapp.dto.request.OrderRequest;
 import com.project.shopapp.dto.response.ApiResponse;
-import com.project.shopapp.entity.Order;
+import com.project.shopapp.model.Order;
 import com.project.shopapp.service.impl.OrderServiceImpl;
 
 import jakarta.validation.Valid;

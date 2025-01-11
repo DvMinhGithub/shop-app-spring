@@ -1,4 +1,4 @@
-package com.project.shopapp.entity;
+package com.project.shopapp.model;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -61,7 +61,7 @@ public class Order {
     boolean active = true;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<OderDetail> orderDetails;
+    List<OrderDetail> orderDetails;
 
     @PrePersist
     public void prePersist() {

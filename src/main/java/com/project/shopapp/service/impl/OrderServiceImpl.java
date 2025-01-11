@@ -6,13 +6,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.project.shopapp.dto.request.OrderRequest;
-import com.project.shopapp.entity.Order;
-import com.project.shopapp.entity.User;
 import com.project.shopapp.exception.DataNotFoundException;
 import com.project.shopapp.mapper.OrderMapper;
+import com.project.shopapp.model.Order;
+import com.project.shopapp.model.User;
 import com.project.shopapp.repository.OrderRepository;
 import com.project.shopapp.repository.UserRepository;
-import com.project.shopapp.service.IOrderService;
+import com.project.shopapp.service.OrderService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,7 +20,7 @@ import lombok.experimental.FieldDefaults;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
-public class OrderServiceImpl implements IOrderService {
+public class OrderServiceImpl implements OrderService {
     UserRepository userRepository;
     OrderRepository orderRepository;
 

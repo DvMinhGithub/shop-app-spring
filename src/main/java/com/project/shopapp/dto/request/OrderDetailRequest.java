@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class OderDetailRequest {
+public class OrderDetailRequest {
 
     @NotNull(message = "Order id is required")
     @Min(value = 1, message = "Order id must be greater than 0")

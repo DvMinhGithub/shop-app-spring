@@ -7,9 +7,9 @@ import org.springframework.data.domain.Pageable;
 import com.project.shopapp.dto.request.ProductRequest;
 import com.project.shopapp.dto.response.ProductListResponse;
 import com.project.shopapp.dto.response.ProductResponse;
-import com.project.shopapp.entity.Product;
+import com.project.shopapp.model.Product;
 
-public interface IProductService {
+public interface ProductService {
     Product createProduct(ProductRequest request) throws IOException;
 
     ProductResponse getProductById(Long id);

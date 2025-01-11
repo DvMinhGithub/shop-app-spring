@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.project.shopapp.dto.request.CategoryRequest;
 import com.project.shopapp.dto.response.ApiResponse;
-import com.project.shopapp.entity.Category;
+import com.project.shopapp.model.Category;
 import com.project.shopapp.service.impl.CategoryServiceImpl;
 
 import jakarta.validation.Valid;

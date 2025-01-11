@@ -1,12 +1,10 @@
-package com.project.shopapp.entity;
+package com.project.shopapp.model;
 
-import java.time.LocalDateTime;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,19 +18,18 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 @Entity
-@Table(name = "tokens")
-public class Token {
+@Table(name = "social_accounts")
+public class SocialAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String token;
-    String tokenType;
-    String email;
-    LocalDateTime expiryDate;
-    boolean revoked;
-    LocalDateTime expiredTime;
+    @Column(nullable = false)
+    String provider;
 
-    @ManyToOne
-    User user;
+    @Column(nullable = false)
+    String providerId;
+
+    String email;
+    String name;
 }

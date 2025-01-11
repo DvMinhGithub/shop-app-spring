@@ -10,8 +10,8 @@ import org.mapstruct.Named;
 
 import com.project.shopapp.dto.request.ProductRequest;
 import com.project.shopapp.dto.response.ProductResponse;
-import com.project.shopapp.entity.Product;
-import com.project.shopapp.entity.ProductImage;
+import com.project.shopapp.model.Product;
+import com.project.shopapp.model.ProductImage;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {

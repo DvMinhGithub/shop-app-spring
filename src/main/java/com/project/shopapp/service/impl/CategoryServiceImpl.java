@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.project.shopapp.dto.request.CategoryRequest;
-import com.project.shopapp.entity.Category;
+import com.project.shopapp.model.Category;
 import com.project.shopapp.repository.CategoryRepository;
-import com.project.shopapp.service.ICategoryService;
+import com.project.shopapp.service.CategoryService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
-public class CategoryServiceImpl implements ICategoryService {
+public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRepository;
 
     @Override

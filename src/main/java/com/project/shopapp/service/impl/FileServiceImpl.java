@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.project.shopapp.service.IFileService;
+import com.project.shopapp.service.FileService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -19,7 +19,7 @@ import lombok.experimental.NonFinal;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
-public class FileServiceImpl implements IFileService {
+public class FileServiceImpl implements FileService {
 
     @NonFinal
     @Value("${file.upload-dir}")

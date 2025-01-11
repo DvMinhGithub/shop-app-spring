@@ -14,7 +14,7 @@ import com.project.shopapp.dto.request.ProductRequest;
 import com.project.shopapp.dto.response.ApiResponse;
 import com.project.shopapp.dto.response.ProductListResponse;
 import com.project.shopapp.dto.response.ProductResponse;
-import com.project.shopapp.entity.Product;
+import com.project.shopapp.model.Product;
 import com.project.shopapp.service.impl.ProductServiceImpl;
 
 import lombok.RequiredArgsConstructor;

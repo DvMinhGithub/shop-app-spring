@@ -4,14 +4,14 @@ import org.springframework.stereotype.Service;
 
 import com.project.shopapp.dto.request.UserCreateRequest;
 import com.project.shopapp.dto.request.UserLoginRequest;
-import com.project.shopapp.entity.Role;
-import com.project.shopapp.entity.User;
 import com.project.shopapp.exception.DataNotFoundException;
 import com.project.shopapp.exception.InvalidPasswordException;
 import com.project.shopapp.mapper.UserMapper;
+import com.project.shopapp.model.Role;
+import com.project.shopapp.model.User;
 import com.project.shopapp.repository.RoleRepository;
 import com.project.shopapp.repository.UserRepository;
-import com.project.shopapp.service.IUserService;
+import com.project.shopapp.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -19,7 +19,7 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 @Service
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     RoleRepository roleRepository;
     UserMapper userMapper;

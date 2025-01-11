@@ -3,7 +3,7 @@ package com.project.shopapp.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.project.shopapp.dto.request.OderDetailRequest;
+import com.project.shopapp.dto.request.OrderDetailRequest;
 import com.project.shopapp.dto.response.ApiResponse;
 
 import jakarta.validation.Valid;
@@ -12,7 +12,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/order-details")
 public class OrderDetailController {
     @PostMapping
-    public ApiResponse<?> createOrderDetail(@RequestBody @Valid OderDetailRequest request) {
+    public ApiResponse<?> createOrderDetail(@RequestBody @Valid OrderDetailRequest request) {
 
         return new ApiResponse<>(HttpStatus.OK.value(), "Order created successfully", null);
     }
@@ -28,7 +28,8 @@ public class OrderDetailController {
     }
 
     @PutMapping("/{orderId}")
-    public ApiResponse<?> updateOrderDetail(@PathVariable Long orderId, @RequestBody @Valid OderDetailRequest request) {
+    public ApiResponse<?> updateOrderDetail(
+            @PathVariable Long orderId, @RequestBody @Valid OrderDetailRequest request) {
         return new ApiResponse<>(HttpStatus.OK.value(), "Order updated successfully", null);
     }
 

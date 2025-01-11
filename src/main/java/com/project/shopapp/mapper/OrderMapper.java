@@ -5,7 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 import com.project.shopapp.dto.request.OrderRequest;
-import com.project.shopapp.entity.Order;
+import com.project.shopapp.model.Order;
 
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
@@ -17,5 +17,10 @@ public interface OrderMapper {
     @Mapping(target = "trackingNumber", ignore = true)
     Order toOrder(OrderRequest request);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "active", ignore = true)
+    @Mapping(target = "orderDetails", ignore = true)
+    @Mapping(target = "trackingNumber", ignore = true)
     void updateOrderFromRequest(OrderRequest request, @MappingTarget Order order);
 }

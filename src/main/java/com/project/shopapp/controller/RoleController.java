@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.shopapp.dto.request.RoleRequest;
 import com.project.shopapp.dto.response.ApiResponse;
-import com.project.shopapp.entity.Role;
+import com.project.shopapp.model.Role;
 import com.project.shopapp.service.impl.RoleServiceImpl;
 
 import jakarta.validation.Valid;

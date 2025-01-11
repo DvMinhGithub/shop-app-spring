@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class ProductImageDTO {
+public class ProductImageRequest {
     Long productId;
 
     @Column(nullable = false)
