@@ -1,7 +1,9 @@
 package com.project.shopapp.dto.request;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,24 +18,26 @@ import lombok.experimental.FieldDefaults;
 public class OrderDetailRequest {
 
     @NotNull(message = "Order id is required")
-    @Min(value = 1, message = "Order id must be greater than 0")
-    long orderId;
+    @Positive(message = "Order id must be greater than 0")
+    Long orderId;
 
     @NotNull(message = "Product id is required")
-    @Min(value = 1, message = "Product id must be greater than 0")
-    long productId;
+    @Positive(message = "Product id must be greater than 0")
+    Long productId;
 
     @NotNull(message = "Price is required")
-    @Min(value = 0, message = "Price must be greater than 0")
-    float price;
+    @PositiveOrZero(message = "Price must be greater than or equal to 0")
+    Float price;
 
     @NotNull(message = "Quantity is required")
-    @Min(value = 1, message = "Quantity must be greater than 0")
+    @Positive(message = "Quantity must be greater than 0")
     Long quantity;
 
     @NotNull(message = "Total money is required")
-    @Min(value = 0, message = "Total money must be greater than 0")
-    long totalMoney;
+    @PositiveOrZero(message = "Total money must be greater than or equal to 0")
+    Long totalMoney;
 
+    @NotNull(message = "Color is required")
+    @Pattern(regexp = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", message = "Color must be a valid HEX color code")
     String color;
 }
