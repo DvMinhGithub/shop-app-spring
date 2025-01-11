@@ -2,6 +2,7 @@ package com.project.shopapp.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
@@ -17,7 +19,7 @@ import lombok.experimental.FieldDefaults;
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Long id;
 
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
@@ -27,13 +29,13 @@ public class OrderDetail {
     Product product;
 
     @Column(nullable = false)
-    float price;
+    Float price;
 
     @Column(nullable = false)
-    int quantity;
+    Long quantity;
 
     @Column(nullable = false)
-    long totalMoney;
+    Long totalMoney;
 
     String color;
 }
