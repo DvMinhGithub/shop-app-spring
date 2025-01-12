@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +20,8 @@ public class WebSecurityConfig {
     private static final String[] PUBLIC_POST_ENDPOINTS = {"/users/login", "/users/register"};
     private static final String[] PUBLIC_GET_ENDPOINTS = {"/products/**", "/categories/**"};
 
+    private final AuthTokenFilter authTokenFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults())
@@ -29,9 +32,9 @@ public class WebSecurityConfig {
                     request.requestMatchers(HttpMethod.GET, PUBLIC_GET_ENDPOINTS)
                             .permitAll();
                     request.anyRequest().authenticated();
-                });
-
-        http.exceptionHandling(handling -> handling.authenticationEntryPoint(new JwtAuthenticationEntryPoints()));
+                })
+                .exceptionHandling(handling -> handling.authenticationEntryPoint(new AuthEntryPointJwt()))
+                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

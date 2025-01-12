@@ -60,7 +60,7 @@ public class Order {
     String paymentMethod;
     boolean active = true;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     List<OrderDetail> orderDetails;
 
     @PrePersist

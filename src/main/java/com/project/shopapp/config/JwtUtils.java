@@ -4,28 +4,27 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.crypto.SecretKey;
-
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.project.shopapp.model.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class JwtConfig {
+public class JwtUtils {
 
     // unit in milliseconds
     @Value("${jwt.expiration}")
     private int expiration;
 
     @Value("${jwt.secret}")
-    private String secret;
+    private String jwtSecret;
 
     public String generateToken(User user) {
         Date now = new Date();
@@ -35,29 +34,33 @@ public class JwtConfig {
         claims.put("phoneNumber", user.getPhoneNumber());
 
         return Jwts.builder()
-                .claims(claims)
-                .subject(user.getPhoneNumber())
-                .issuedAt(now)
-                .expiration(expiryDate)
-                .signWith(getSigningKey())
+                .setSubject(user.getPhoneNumber())
+                .claim("phoneNumber", user.getPhoneNumber())
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
-    private SecretKey getSigningKey() {
-        SecretKey key = Jwts.SIG.HS256.key().build();
-        byte[] keyBytes = key.getEncoded();
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
-
     public Claims getClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
     }
 
     public boolean isTokenExpired(String token) {
         return getClaims(token).getExpiration().before(new Date());
+    }
+
+    public boolean validateToken(String token, UserDetails user) {
+        String phoneNumber = getClaims(token).get("phoneNumber", String.class);
+        return phoneNumber.equals(user.getUsername()) && !isTokenExpired(token);
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            getClaims(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
