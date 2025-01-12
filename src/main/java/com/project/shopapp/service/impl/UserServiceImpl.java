@@ -5,7 +5,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.project.shopapp.config.JwtConfig;
+import com.project.shopapp.config.JwtUtils;
 import com.project.shopapp.dto.request.UserCreateRequest;
 import com.project.shopapp.dto.request.UserLoginRequest;
 import com.project.shopapp.exception.DataNotFoundException;
@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     RoleRepository roleRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
-    JwtConfig jwtConfig;
+    JwtUtils jwtUtil;
     AuthenticationManager authenticationManager;
 
     @Override
@@ -67,6 +67,6 @@ public class UserServiceImpl implements UserService {
                 new UsernamePasswordAuthenticationToken(phoneNumber, password);
         authenticationManager.authenticate(authenticationToken);
 
-        return jwtConfig.generateToken(user);
+        return jwtUtil.generateToken(user);
     }
 }

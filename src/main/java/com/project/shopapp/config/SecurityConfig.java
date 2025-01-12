@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
     private final UserRepository userRepository;
 
-    // Security configuration
     @Bean
     public UserDetailsService userDetailsService() {
         return phoneNumber -> {

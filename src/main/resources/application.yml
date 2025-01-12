@@ -16,6 +16,7 @@ spring:
     properties:
       hibernate:
         format-sql: true
+    open-in-view: false
   servlet:
     multipart:
       enabled: true
@@ -37,5 +38,5 @@ server:
     context-path: /api/v1
     
 jwt:
-  secret: 'secret'
+  secret: '3q2+7w==e3r5t6y7u8i9o0p1a2s3d4f5g6h7j8k9l0z1x2c3v4b5n6m'
   expiration: 86400000
