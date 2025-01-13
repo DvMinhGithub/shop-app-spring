@@ -5,10 +5,11 @@ import java.io.IOException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.project.shopapp.model.User;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -37,16 +38,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         }
 
         String token = authorizationHeader.substring(7);
+        String phoneNumber = jwtUtil.getClaims(token).getSubject();
 
         try {
-            String phoneNumber = jwtUtil.getClaims(token).getSubject();
-            log.debug("Extracted phone number from JWT: {}", phoneNumber);
-
             if (phoneNumber != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails existingUser = userDetailsService.loadUserByUsername(phoneNumber);
+                User existingUser = (User) userDetailsService.loadUserByUsername(phoneNumber);
 
                 if (existingUser != null && jwtUtil.validateToken(token, existingUser)) {
-                    log.debug("User authenticated: {}", phoneNumber);
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                             new UsernamePasswordAuthenticationToken(existingUser, null, existingUser.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
