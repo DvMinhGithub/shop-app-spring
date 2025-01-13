@@ -2,7 +2,6 @@ package com.project.shopapp.mapper;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -31,6 +30,6 @@ public interface ProductMapper {
         if (productImages == null || productImages.isEmpty()) {
             return Collections.emptyList();
         }
-        return productImages.stream().map(ProductImage::getImageUrl).collect(Collectors.toList());
+        return productImages.stream().map(ProductImage::getImageUrl).toList();
     }
 }

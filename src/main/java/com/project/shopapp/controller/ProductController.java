@@ -63,16 +63,16 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<?> deleteProduct(@PathVariable Long id) {
+    public ApiResponse<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
-        return ApiResponse.builder()
+        return ApiResponse.<Void>builder()
                 .code(HttpStatus.NO_CONTENT.value())
                 .message("Product deleted successfully")
                 .build();
     }
 
     @PostMapping("/generateFakeProducts")
-    public ApiResponse<?> generateFakeProducts() throws IOException {
+    public ApiResponse<Void> generateFakeProducts() throws IOException {
         Faker faker = new Faker();
 
         for (int i = 0; i < 10; i++) {
@@ -91,7 +91,7 @@ public class ProductController {
             try {
                 productService.createProduct(productRequest);
             } catch (Exception e) {
-                return ApiResponse.builder()
+                return ApiResponse.<Void>builder()
                         .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
                         .message("Error generating fake products")
                         .build();
@@ -99,7 +99,7 @@ public class ProductController {
             productService.createProduct(productRequest);
         }
 
-        return ApiResponse.builder()
+        return ApiResponse.<Void>builder()
                 .code(HttpStatus.CREATED.value())
                 .message("Fake products generated successfully")
                 .build();

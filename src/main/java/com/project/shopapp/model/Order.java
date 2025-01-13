@@ -3,6 +3,7 @@ package com.project.shopapp.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.shopapp.enums.OrderStatus;
 
 import jakarta.persistence.*;
@@ -61,6 +62,7 @@ public class Order {
     boolean active = true;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference
     List<OrderDetail> orderDetails;
 
     @PrePersist

@@ -23,18 +23,18 @@ public class FileServiceImpl implements FileService {
 
     @NonFinal
     @Value("${file.upload-dir}")
-    protected String UPLOAD_DIR;
+    protected String uploadDir;
 
     @Override
     public String storeFile(MultipartFile file) throws IOException {
         if (file.isEmpty()) {
             throw new IOException("Failed to store empty file.");
         }
-        if (Files.notExists(Paths.get(UPLOAD_DIR))) {
-            Files.createDirectories(Paths.get(UPLOAD_DIR));
+        if (Files.notExists(Paths.get(uploadDir))) {
+            Files.createDirectories(Paths.get(uploadDir));
         }
         String uniqueFileName = UUID.randomUUID().toString() + getExtension(file.getOriginalFilename());
-        Path path = Paths.get(UPLOAD_DIR + uniqueFileName);
+        Path path = Paths.get(uploadDir + uniqueFileName);
         Files.write(path, file.getBytes());
         return path.toString();
     }

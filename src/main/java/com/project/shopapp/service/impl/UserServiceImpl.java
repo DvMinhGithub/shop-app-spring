@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.project.shopapp.config.JwtUtils;
 import com.project.shopapp.dto.request.UserCreateRequest;
 import com.project.shopapp.dto.request.UserLoginRequest;
+import com.project.shopapp.enums.UserRole;
+import com.project.shopapp.exception.AdminCreationException;
 import com.project.shopapp.exception.DataNotFoundException;
 import com.project.shopapp.exception.InvalidPasswordException;
 import com.project.shopapp.mapper.UserMapper;
@@ -40,6 +42,11 @@ public class UserServiceImpl implements UserService {
         Role role = roleRepository
                 .findById(request.getRoleId())
                 .orElseThrow(() -> new DataNotFoundException("Role not found"));
+
+        if (role.getName().equals(UserRole.ADMIN.name())) {
+            throw new AdminCreationException("You can't create an admin user");
+        }
+
         User user = userMapper.toUser(request);
         user.setRole(role);
         if (request.getGoogleAccountId() == 0 || request.getFacebookAccountId() == 0) {
@@ -57,10 +64,9 @@ public class UserServiceImpl implements UserService {
                 .findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new DataNotFoundException("User not found"));
 
-        if (user.getGoogleAccountId() != 0 || user.getFacebookAccountId() != 0) {
-            if (!passwordEncoder.matches(password, user.getPassword())) {
-                throw new InvalidPasswordException("Invalid password");
-            }
+        if ((user.getGoogleAccountId() != 0 || user.getFacebookAccountId() != 0)
+                && !passwordEncoder.matches(password, user.getPassword())) {
+            throw new InvalidPasswordException("Invalid password");
         }
 
         UsernamePasswordAuthenticationToken authenticationToken =
