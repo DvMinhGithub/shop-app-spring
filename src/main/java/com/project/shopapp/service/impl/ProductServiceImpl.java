@@ -36,6 +36,8 @@ public class ProductServiceImpl implements ProductService {
 
     FileServiceImpl fileServiceImpl;
 
+    static String productNotFound = "Product not found";
+
     @Override
     public Product createProduct(ProductRequest request) throws IOException {
         Category category = categoryRepository
@@ -61,8 +63,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse getProductById(Long id) {
-        Product product =
-                productRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Product not found"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new DataNotFoundException(productNotFound));
         return productMapper.toProductResponse(product);
     }
 
@@ -77,32 +78,28 @@ public class ProductServiceImpl implements ProductService {
             return productResponse;
         });
 
-        ProductListResponse productListResponse = ProductListResponse.builder()
+        return ProductListResponse.builder()
                 .products(products.getContent())
                 .totalPages(products.getTotalPages())
                 .build();
-
-        return productListResponse;
     }
 
     @Override
     public Product updateProduct(Long id, ProductRequest request) {
-        Product product =
-                productRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Product not found"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new DataNotFoundException(productNotFound));
         productMapper.toProduct(request);
         return productRepository.save(product);
     }
 
     @Override
     public void deleteProduct(Long id) {
-        Product product =
-                productRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Product not found"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new DataNotFoundException(productNotFound));
         productRepository.delete(product);
     }
 
     ProductImage createProductImage(Long productId, MultipartFile file) throws IOException {
         Product product =
-                productRepository.findById(productId).orElseThrow(() -> new DataNotFoundException("Product not found"));
+                productRepository.findById(productId).orElseThrow(() -> new DataNotFoundException(productNotFound));
 
         ProductImage productImage = ProductImage.builder()
                 .product(product)

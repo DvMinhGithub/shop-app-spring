@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.project.shopapp.dto.request.OrderDetailRequest;
 import com.project.shopapp.dto.response.ApiResponse;
+import com.project.shopapp.dto.response.OrderDetailResponse;
 import com.project.shopapp.service.impl.OrderDetailServiceImpl;
 
 import jakarta.validation.Valid;
@@ -19,8 +20,8 @@ public class OrderDetailController {
     OrderDetailServiceImpl orderDetailService;
 
     @PostMapping
-    public ApiResponse<?> createOrderDetail(@RequestBody @Valid OrderDetailRequest request) {
-        return ApiResponse.builder()
+    public ApiResponse<OrderDetailResponse> createOrderDetail(@RequestBody @Valid OrderDetailRequest request) {
+        return ApiResponse.<OrderDetailResponse>builder()
                 .code(HttpStatus.CREATED.value())
                 .message("Order created successfully")
                 .result(orderDetailService.createOrderDetail(request))
@@ -46,9 +47,9 @@ public class OrderDetailController {
     }
 
     @PutMapping("/{orderId}")
-    public ApiResponse<?> updateOrderDetail(
+    public ApiResponse<OrderDetailResponse> updateOrderDetail(
             @PathVariable Long orderId, @RequestBody @Valid OrderDetailRequest request) {
-        return ApiResponse.builder()
+        return ApiResponse.<OrderDetailResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Order updated successfully")
                 .result(orderDetailService.updateOrderDetail(orderId, request))

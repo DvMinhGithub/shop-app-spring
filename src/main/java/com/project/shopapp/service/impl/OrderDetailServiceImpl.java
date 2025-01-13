@@ -29,6 +29,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     OrderDetailMapper orderDetailMapper;
 
+    static String orderDetailNotFOund = "Order detail not found";
+
     @Override
     public OrderDetailResponse createOrderDetail(OrderDetailRequest orderDetailRequest) {
         Order existOrder = orderRepository
@@ -49,9 +51,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     public OrderDetailResponse getOrderDetail(Long id) {
-        OrderDetail orderDetail = orderDetailRepository
-                .findById(id)
-                .orElseThrow(() -> new DataNotFoundException("Order detail not found"));
+        OrderDetail orderDetail =
+                orderDetailRepository.findById(id).orElseThrow(() -> new DataNotFoundException(orderDetailNotFOund));
 
         return orderDetailMapper.toOrderDetailResponse(orderDetail);
     }
@@ -65,9 +66,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     public OrderDetailResponse updateOrderDetail(Long id, OrderDetailRequest orderDetailRequest) {
-        OrderDetail existOrderDetail = orderDetailRepository
-                .findById(id)
-                .orElseThrow(() -> new DataNotFoundException("Order detail not found"));
+        OrderDetail existOrderDetail =
+                orderDetailRepository.findById(id).orElseThrow(() -> new DataNotFoundException(orderDetailNotFOund));
 
         Order existOrder = orderRepository
                 .findById(orderDetailRequest.getOrderId())
@@ -87,9 +87,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     public void deleteOrderDetail(Long id) {
-        OrderDetail existOrderDetail = orderDetailRepository
-                .findById(id)
-                .orElseThrow(() -> new DataNotFoundException("Order detail not found"));
+        OrderDetail existOrderDetail =
+                orderDetailRepository.findById(id).orElseThrow(() -> new DataNotFoundException(orderDetailNotFOund));
 
         orderDetailRepository.delete(existOrderDetail);
     }
