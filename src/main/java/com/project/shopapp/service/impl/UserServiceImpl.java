@@ -9,7 +9,6 @@ import com.project.shopapp.config.JwtUtils;
 import com.project.shopapp.dto.request.UserCreateRequest;
 import com.project.shopapp.dto.request.UserLoginRequest;
 import com.project.shopapp.enums.UserRole;
-import com.project.shopapp.exception.AdminCreationException;
 import com.project.shopapp.exception.DataNotFoundException;
 import com.project.shopapp.exception.InvalidPasswordException;
 import com.project.shopapp.mapper.UserMapper;
@@ -40,12 +39,8 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("User already exists");
         }
         Role role = roleRepository
-                .findById(request.getRoleId())
+                .findByName(UserRole.USER.name())
                 .orElseThrow(() -> new DataNotFoundException("Role not found"));
-
-        if (role.getName().equals(UserRole.ADMIN.name())) {
-            throw new AdminCreationException("You can't create an admin user");
-        }
 
         User user = userMapper.toUser(request);
         user.setRole(role);
@@ -72,7 +67,6 @@ public class UserServiceImpl implements UserService {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(phoneNumber, password);
         authenticationManager.authenticate(authenticationToken);
-
         return jwtUtil.generateToken(user);
     }
 }

@@ -3,7 +3,6 @@ package com.project.shopapp.dto.request;
 import java.sql.Date;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +32,5 @@ public class UserCreateRequest {
     int facebookAccountId;
     int googleAccountId;
 
-    @NotNull(message = "Role ID is required")
     Long roleId;
 }
