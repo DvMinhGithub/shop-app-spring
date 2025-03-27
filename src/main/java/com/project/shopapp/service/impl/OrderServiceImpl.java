@@ -13,6 +13,8 @@ import com.project.shopapp.model.User;
 import com.project.shopapp.repository.OrderRepository;
 import com.project.shopapp.repository.UserRepository;
 import com.project.shopapp.service.OrderService;
+import com.project.shopapp.utils.MessageKeys;
+import com.project.shopapp.utils.MessageUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,20 +25,21 @@ import lombok.experimental.FieldDefaults;
 public class OrderServiceImpl implements OrderService {
     UserRepository userRepository;
     OrderRepository orderRepository;
-
+    MessageUtils messageUtils;
     OrderMapper orderMapper;
 
     @Override
     public Order createOrder(OrderRequest request) {
         User user = userRepository
                 .findById(request.getUserId())
-                .orElseThrow(() -> new DataNotFoundException("User not found"));
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.USER_NOT_FOUND)));
 
         LocalDateTime shippingDate =
                 request.getShippingDate() == null ? LocalDateTime.now().plusDays(1) : request.getShippingDate();
 
         if (shippingDate.isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("Shipping date must be greater than order date");
+            throw new IllegalArgumentException(
+                    messageUtils.getMessage(MessageKeys.SHIPPING_DATE_MUST_BE_GREATER_THAN_ORDER_DATE));
         }
 
         Order order = orderMapper.toOrder(request);
@@ -60,18 +63,18 @@ public class OrderServiceImpl implements OrderService {
     public Order updateOrder(Long id, OrderRequest request) {
         Order existOrder = orderRepository
                 .findById(id)
-                .orElseThrow(() -> new DataNotFoundException(String.format("Order with id %d not found", id)));
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.ORDER_NOT_FOUND)));
 
         User existUser = userRepository
                 .findById(request.getUserId())
-                .orElseThrow(() ->
-                        new DataNotFoundException(String.format("User with id %d not found", request.getUserId())));
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.USER_NOT_FOUND)));
 
         LocalDateTime shippingDate =
                 request.getShippingDate() == null ? existOrder.getShippingDate() : request.getShippingDate();
 
         if (shippingDate.isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("Shipping date must be greater than order date");
+            throw new IllegalArgumentException(
+                    messageUtils.getMessage(MessageKeys.SHIPPING_DATE_MUST_BE_GREATER_THAN_ORDER_DATE));
         }
 
         orderMapper.updateOrderFromRequest(request, existOrder);
@@ -88,7 +91,7 @@ public class OrderServiceImpl implements OrderService {
     public void deleteOrder(Long id) {
         Order existOrder = orderRepository
                 .findById(id)
-                .orElseThrow(() -> new DataNotFoundException(String.format("Order with id %d not found", id)));
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.ORDER_NOT_FOUND)));
 
         existOrder.setActive(false);
         orderRepository.save(existOrder);

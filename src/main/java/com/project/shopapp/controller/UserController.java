@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.shopapp.dto.request.UserCreateRequest;
 import com.project.shopapp.dto.request.UserLoginRequest;
 import com.project.shopapp.dto.response.ApiResponse;
+import com.project.shopapp.dto.response.LoginResponse;
 import com.project.shopapp.model.User;
 import com.project.shopapp.service.impl.UserServiceImpl;
+import com.project.shopapp.utils.MessageKeys;
+import com.project.shopapp.utils.MessageUtils;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +25,13 @@ import lombok.experimental.FieldDefaults;
 @RequestMapping("/users")
 public class UserController {
     UserServiceImpl userService;
+    MessageUtils messageUtils;
 
     @PostMapping("/login")
-    public ApiResponse<String> login(@RequestBody UserLoginRequest request) {
-        return ApiResponse.<String>builder()
+    public ApiResponse<LoginResponse> login(@RequestBody UserLoginRequest request) {
+        return ApiResponse.<LoginResponse>builder()
                 .code(HttpStatus.OK.value())
-                .message("User logged in successfully")
+                .message(messageUtils.getMessage(MessageKeys.LOGIN_SUCCESSFUL))
                 .result(userService.login(request))
                 .build();
     }
@@ -35,6 +39,8 @@ public class UserController {
     @PostMapping("/register")
     public ApiResponse<User> register(@RequestBody @Valid UserCreateRequest request) {
         return new ApiResponse<>(
-                HttpStatus.CREATED.value(), "User registered successfully", userService.createUser(request));
+                HttpStatus.CREATED.value(),
+                messageUtils.getMessage(MessageKeys.REGISTRATION_SUCCESSFUL),
+                userService.createUser(request));
     }
 }

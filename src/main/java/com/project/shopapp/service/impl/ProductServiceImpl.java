@@ -20,6 +20,8 @@ import com.project.shopapp.repository.CategoryRepository;
 import com.project.shopapp.repository.ProductImageRepository;
 import com.project.shopapp.repository.ProductRepository;
 import com.project.shopapp.service.ProductService;
+import com.project.shopapp.utils.MessageKeys;
+import com.project.shopapp.utils.MessageUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -35,14 +37,13 @@ public class ProductServiceImpl implements ProductService {
     ProductMapper productMapper;
 
     FileServiceImpl fileServiceImpl;
-
-    static String productNotFound = "Product not found";
+    MessageUtils messageUtils;
 
     @Override
     public Product createProduct(ProductRequest request) throws IOException {
         Category category = categoryRepository
                 .findById(request.getCategoryId())
-                .orElseThrow(() -> new DataNotFoundException("Category not found"));
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.PRODUCT_NOT_FOUND)));
         Product product = productMapper.toProduct(request);
         product.setCategory(category);
 
@@ -63,7 +64,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse getProductById(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new DataNotFoundException(productNotFound));
+        Product product = productRepository
+                .findById(id)
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.PRODUCT_NOT_FOUND)));
         return productMapper.toProductResponse(product);
     }
 
@@ -86,20 +89,25 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product updateProduct(Long id, ProductRequest request) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new DataNotFoundException(productNotFound));
+        Product product = productRepository
+                .findById(id)
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.PRODUCT_NOT_FOUND)));
         productMapper.toProduct(request);
         return productRepository.save(product);
     }
 
     @Override
     public void deleteProduct(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new DataNotFoundException(productNotFound));
+        Product product = productRepository
+                .findById(id)
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.PRODUCT_NOT_FOUND)));
         productRepository.delete(product);
     }
 
     ProductImage createProductImage(Long productId, MultipartFile file) throws IOException {
-        Product product =
-                productRepository.findById(productId).orElseThrow(() -> new DataNotFoundException(productNotFound));
+        Product product = productRepository
+                .findById(productId)
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.PRODUCT_NOT_FOUND)));
 
         ProductImage productImage = ProductImage.builder()
                 .product(product)
@@ -108,7 +116,7 @@ public class ProductServiceImpl implements ProductService {
 
         // max 5 images per product
         if (productImageRepository.findByProductId(productId).size() >= 5) {
-            throw new DataNotFoundException("Product can have max 5 images");
+            throw new RuntimeException(messageUtils.getMessage(MessageKeys.PRODUCT_IMAGE_MAX));
         }
 
         return productImageRepository.save(productImage);

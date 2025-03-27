@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.shopapp.service.FileService;
+import com.project.shopapp.utils.MessageKeys;
+import com.project.shopapp.utils.MessageUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,6 +23,8 @@ import lombok.experimental.NonFinal;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class FileServiceImpl implements FileService {
 
+    MessageUtils messageUtils;
+
     @NonFinal
     @Value("${file.upload-dir}")
     protected String uploadDir;
@@ -28,7 +32,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public String storeFile(MultipartFile file) throws IOException {
         if (file.isEmpty()) {
-            throw new IOException("Failed to store empty file.");
+            throw new IOException(messageUtils.getMessage(MessageKeys.FILE_IS_EMPTY));
         }
         if (Files.notExists(Paths.get(uploadDir))) {
             Files.createDirectories(Paths.get(uploadDir));

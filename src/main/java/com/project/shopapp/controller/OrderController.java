@@ -9,6 +9,8 @@ import com.project.shopapp.dto.request.OrderRequest;
 import com.project.shopapp.dto.response.ApiResponse;
 import com.project.shopapp.model.Order;
 import com.project.shopapp.service.impl.OrderServiceImpl;
+import com.project.shopapp.utils.MessageKeys;
+import com.project.shopapp.utils.MessageUtils;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,21 +22,23 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 public class OrderController {
     OrderServiceImpl orderService;
+    MessageUtils messageUtils;
 
     @PostMapping
     public ApiResponse<Order> createOrder(@RequestBody @Valid OrderRequest request) {
         return ApiResponse.<Order>builder()
-                .code(HttpStatus.OK.value())
-                .message("Order created successfully")
+                .code(HttpStatus.CREATED.value())
+                .message(messageUtils.getMessage(MessageKeys.ORDER_CREATE_SUCCESS))
                 .result(orderService.createOrder(request))
                 .build();
     }
 
     @GetMapping("/user/{userId}")
     public ApiResponse<List<Order>> getOrdersByUserId(@PathVariable Long userId) {
+
         return ApiResponse.<List<Order>>builder()
                 .code(HttpStatus.OK.value())
-                .message("Get orders by user id successfully")
+                .message(messageUtils.getMessage(MessageKeys.ORDER_LIST_BY_USER_SUCCESS))
                 .result(orderService.findByUserId(userId))
                 .build();
     }
@@ -43,26 +47,26 @@ public class OrderController {
     public ApiResponse<Order> getOrder(@PathVariable Long orderId) {
         return ApiResponse.<Order>builder()
                 .code(HttpStatus.OK.value())
-                .message("Get order detail successfully")
+                .message(messageUtils.getMessage(MessageKeys.ORDER_DETAIL_SUCCESS))
                 .result(orderService.getOrder(orderId))
                 .build();
     }
 
-    @PutMapping("{orderId}")
+    @PutMapping("/{orderId}")
     public ApiResponse<Order> updateOrder(@PathVariable Long orderId, @RequestBody @Valid OrderRequest request) {
         return ApiResponse.<Order>builder()
                 .code(HttpStatus.OK.value())
-                .message("Order updated successfully")
+                .message(messageUtils.getMessage(MessageKeys.ORDER_UPDATE_SUCCESS))
                 .result(orderService.updateOrder(orderId, request))
                 .build();
     }
 
-    @DeleteMapping("{orderId}")
+    @DeleteMapping("/{orderId}")
     public ApiResponse<?> deleteOrder(@PathVariable Long orderId) {
         orderService.deleteOrder(orderId);
         return ApiResponse.builder()
-                .code(HttpStatus.OK.value())
-                .message("Order deleted successfully")
+                .code(HttpStatus.NO_CONTENT.value())
+                .message(messageUtils.getMessage(MessageKeys.ORDER_DELETE_SUCCESS))
                 .build();
     }
 }

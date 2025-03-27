@@ -14,22 +14,24 @@ import com.project.shopapp.dto.request.RoleRequest;
 import com.project.shopapp.dto.response.ApiResponse;
 import com.project.shopapp.model.Role;
 import com.project.shopapp.service.impl.RoleServiceImpl;
+import com.project.shopapp.utils.MessageKeys;
+import com.project.shopapp.utils.MessageUtils;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 
 @RestController
 @RequestMapping("/roles")
 @RequiredArgsConstructor
-@FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 public class RoleController {
-    RoleServiceImpl roleService;
+    private final RoleServiceImpl roleService;
+    private final MessageUtils messageUtils;
 
     @PostMapping
     public ApiResponse<Role> createRole(@RequestBody @Valid RoleRequest request) {
         return ApiResponse.<Role>builder()
                 .code(HttpStatus.CREATED.value())
+                .message(messageUtils.getMessage(MessageKeys.ROLE_CREATE_SUCCESS))
                 .result(roleService.createRole(request))
                 .build();
     }
@@ -38,6 +40,7 @@ public class RoleController {
     public ApiResponse<?> getRoles() {
         return ApiResponse.builder()
                 .code(HttpStatus.OK.value())
+                .message(messageUtils.getMessage(MessageKeys.ROLE_LIST_SUCCESS))
                 .result(roleService.getRoles())
                 .build();
     }
@@ -46,6 +49,7 @@ public class RoleController {
     public ApiResponse<Role> updateRole(@PathVariable Long id, @RequestBody @Valid RoleRequest request) {
         return ApiResponse.<Role>builder()
                 .code(HttpStatus.OK.value())
+                .message(MessageKeys.ROLE_UPDATE_SUCCESS)
                 .result(roleService.updateRole(id, request))
                 .build();
     }
@@ -55,7 +59,7 @@ public class RoleController {
         roleService.deleteRole(id);
         return ApiResponse.builder()
                 .code(HttpStatus.NO_CONTENT.value())
-                .message("Role deleted successfully")
+                .message(MessageKeys.ROLE_DELETE_SUCCESS)
                 .build();
     }
 }

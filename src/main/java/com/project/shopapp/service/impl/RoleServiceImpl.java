@@ -8,6 +8,8 @@ import com.project.shopapp.dto.request.RoleRequest;
 import com.project.shopapp.model.Role;
 import com.project.shopapp.repository.RoleRepository;
 import com.project.shopapp.service.RoleService;
+import com.project.shopapp.utils.MessageKeys;
+import com.project.shopapp.utils.MessageUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -17,11 +19,12 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class RoleServiceImpl implements RoleService {
     RoleRepository roleRepository;
+    MessageUtils messageUtils;
 
     @Override
     public Role createRole(RoleRequest request) {
         if (roleRepository.existsByName(request.getName())) {
-            throw new RuntimeException("Role already exists");
+            throw new RuntimeException(messageUtils.getMessage(MessageKeys.ROLE_ALREADY_EXISTS));
         }
         Role role = Role.builder().name(request.getName()).build();
         return roleRepository.save(role);
@@ -34,7 +37,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role updateRole(Long id, RoleRequest request) throws RuntimeException {
-        Role existingRole = roleRepository.findById(id).orElseThrow(() -> new RuntimeException("Role not found"));
+        Role existingRole = roleRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException(messageUtils.getMessage(MessageKeys.ROLE_NOT_FOUND)));
         existingRole.setName(request.getName());
         return roleRepository.save(existingRole);
     }
@@ -42,7 +47,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void deleteRole(Long id) {
         if (!roleRepository.existsById(id)) {
-            throw new RuntimeException("Role not found");
+            throw new RuntimeException(messageUtils.getMessage(MessageKeys.ROLE_NOT_FOUND));
         }
         roleRepository.deleteById(id);
     }

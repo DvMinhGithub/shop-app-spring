@@ -4,9 +4,7 @@ import java.io.IOException;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import com.github.javafaker.Faker;
@@ -16,23 +14,25 @@ import com.project.shopapp.dto.response.ProductListResponse;
 import com.project.shopapp.dto.response.ProductResponse;
 import com.project.shopapp.model.Product;
 import com.project.shopapp.service.impl.ProductServiceImpl;
+import com.project.shopapp.utils.MessageKeys;
+import com.project.shopapp.utils.MessageUtils;
 
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
-@FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class ProductController {
-    ProductServiceImpl productService;
+    private final ProductServiceImpl productService;
+    private final MessageUtils messageUtils;
 
     @GetMapping
     public ApiResponse<ProductListResponse> getProducts(@RequestParam int page, @RequestParam int limit) {
         Pageable pageRequest =
-                PageRequest.of(page - 1, limit, Sort.by("createdAt").descending());
+                PageRequest.of(page - 1, limit);
         return ApiResponse.<ProductListResponse>builder()
                 .code(HttpStatus.OK.value())
+                .message(messageUtils.getMessage(MessageKeys.PRODUCT_LIST_SUCCESS))
                 .result(productService.getAllProducts(pageRequest))
                 .build();
     }
@@ -41,16 +41,17 @@ public class ProductController {
     public ApiResponse<ProductResponse> getProductById(@PathVariable Long id) {
         return ApiResponse.<ProductResponse>builder()
                 .code(HttpStatus.OK.value())
+                .message(messageUtils.getMessage(MessageKeys.PRODUCT_DETAIL_SUCCESS))
                 .result(productService.getProductById(id))
                 .build();
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = "multipart/form-data")
     public ApiResponse<Product> createProduct(@ModelAttribute ProductRequest request) throws IOException {
-        ProductRequest productRequest = request;
         return ApiResponse.<Product>builder()
                 .code(HttpStatus.CREATED.value())
-                .result(productService.createProduct(productRequest))
+                .message(messageUtils.getMessage(MessageKeys.PRODUCT_CREATE_SUCCESS))
+                .result(productService.createProduct(request))
                 .build();
     }
 
@@ -58,16 +59,16 @@ public class ProductController {
     public ApiResponse<Product> updateProduct(@PathVariable Long id, @RequestBody ProductRequest request) {
         return ApiResponse.<Product>builder()
                 .code(HttpStatus.OK.value())
+                .message(messageUtils.getMessage(MessageKeys.PRODUCT_UPDATE_SUCCESS))
                 .result(productService.updateProduct(id, request))
                 .build();
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.NO_CONTENT.value())
-                .message("Product deleted successfully")
+                .message(messageUtils.getMessage(MessageKeys.PRODUCT_DELETE_SUCCESS))
                 .build();
     }
 
@@ -88,20 +89,19 @@ public class ProductController {
                     .price(faker.number().randomDouble(2, 1, 1000000))
                     .categoryId((long) faker.number().numberBetween(1, 4))
                     .build();
+
             try {
                 productService.createProduct(productRequest);
             } catch (Exception e) {
                 return ApiResponse.<Void>builder()
                         .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                        .message("Error generating fake products")
+                        .message(messageUtils.getMessage(MessageKeys.PRODUCT_GENERATE_ERROR))
                         .build();
             }
-            productService.createProduct(productRequest);
         }
-
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.CREATED.value())
-                .message("Fake products generated successfully")
+                .message(messageUtils.getMessage(MessageKeys.PRODUCT_GENERATE_SUCCESS))
                 .build();
     }
 }

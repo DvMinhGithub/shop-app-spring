@@ -7,26 +7,34 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.project.shopapp.dto.response.ApiResponse;
+import com.project.shopapp.utils.MessageKeys;
+import com.project.shopapp.utils.MessageUtils;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
 @Slf4j
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
+    private final MessageUtils messageUtils;
+
     @ExceptionHandler(value = RuntimeException.class)
     public ResponseEntity<ApiResponse<?>> handleRuntimeException(RuntimeException e) {
         log.error("Exception caught", e);
-        ApiResponse<?> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), null);
+        String baseMessage = messageUtils.getMessage(MessageKeys.ERROR_INTERNAL_SERVER);
+        String detailedMessage = e.getMessage();
+        ApiResponse<?> response =
+                new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), baseMessage + detailedMessage, null);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<?>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error("Exception caught", e);
-        ApiResponse<?> response = new ApiResponse<>(
-                HttpStatus.BAD_REQUEST.value(),
-                e.getBindingResult().getFieldError().getDefaultMessage(),
-                null);
+        String baseMessage = messageUtils.getMessage(MessageKeys.ERROR_INVALID_REQUEST);
+        String errorMessage = e.getBindingResult().getFieldError().getDefaultMessage();
+        ApiResponse<?> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), baseMessage + errorMessage, null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 

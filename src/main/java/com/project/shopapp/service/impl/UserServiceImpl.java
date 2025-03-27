@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.project.shopapp.config.JwtUtils;
 import com.project.shopapp.dto.request.UserCreateRequest;
 import com.project.shopapp.dto.request.UserLoginRequest;
+import com.project.shopapp.dto.response.LoginResponse;
 import com.project.shopapp.enums.UserRole;
 import com.project.shopapp.exception.DataNotFoundException;
 import com.project.shopapp.exception.InvalidPasswordException;
@@ -17,6 +18,8 @@ import com.project.shopapp.model.User;
 import com.project.shopapp.repository.RoleRepository;
 import com.project.shopapp.repository.UserRepository;
 import com.project.shopapp.service.UserService;
+import com.project.shopapp.utils.MessageKeys;
+import com.project.shopapp.utils.MessageUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -30,17 +33,18 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
     JwtUtils jwtUtil;
+    MessageUtils messageUtils;
     AuthenticationManager authenticationManager;
 
     @Override
     public User createUser(UserCreateRequest request) {
         String phoneNumber = request.getPhoneNumber();
         if (userRepository.existsByPhoneNumber(phoneNumber)) {
-            throw new RuntimeException("User already exists");
+            throw new RuntimeException(messageUtils.getMessage(MessageKeys.USER_ALREADY_EXISTS));
         }
         Role role = roleRepository
                 .findByName(UserRole.USER.name())
-                .orElseThrow(() -> new DataNotFoundException("Role not found"));
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.ROLE_NOT_FOUND)));
 
         User user = userMapper.toUser(request);
         user.setRole(role);
@@ -52,21 +56,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String login(UserLoginRequest request) {
+    public LoginResponse login(UserLoginRequest request) {
         String phoneNumber = request.getPhoneNumber();
         String password = request.getPassword();
         User user = userRepository
                 .findByPhoneNumber(phoneNumber)
-                .orElseThrow(() -> new DataNotFoundException("User not found"));
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.USER_NOT_FOUND)));
 
         if ((user.getGoogleAccountId() != 0 || user.getFacebookAccountId() != 0)
                 && !passwordEncoder.matches(password, user.getPassword())) {
-            throw new InvalidPasswordException("Invalid password");
+            throw new InvalidPasswordException(messageUtils.getMessage(MessageKeys.INVALID_PASSWORD));
         }
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(phoneNumber, password);
         authenticationManager.authenticate(authenticationToken);
-        return jwtUtil.generateToken(user);
+        return new LoginResponse(jwtUtil.generateToken(user));
     }
 }

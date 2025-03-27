@@ -15,6 +15,8 @@ import com.project.shopapp.repository.OrderDetailRepository;
 import com.project.shopapp.repository.OrderRepository;
 import com.project.shopapp.repository.ProductRepository;
 import com.project.shopapp.service.OrderDetailService;
+import com.project.shopapp.utils.MessageKeys;
+import com.project.shopapp.utils.MessageUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,20 +28,18 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     OrderRepository orderRepository;
     ProductRepository productRepository;
     OrderDetailRepository orderDetailRepository;
-
+    MessageUtils messageUtils;
     OrderDetailMapper orderDetailMapper;
-
-    static String orderDetailNotFOund = "Order detail not found";
 
     @Override
     public OrderDetailResponse createOrderDetail(OrderDetailRequest orderDetailRequest) {
         Order existOrder = orderRepository
                 .findById(orderDetailRequest.getOrderId())
-                .orElseThrow(() -> new DataNotFoundException("Order not found"));
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.ORDER_NOT_FOUND)));
 
         Product existProduct = productRepository
                 .findById(orderDetailRequest.getProductId())
-                .orElseThrow(() -> new DataNotFoundException("Product not found"));
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.PRODUCT_NOT_FOUND)));
 
         OrderDetail orderDetail = orderDetailMapper.toOrderDetail(orderDetailRequest);
 
@@ -51,8 +51,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     public OrderDetailResponse getOrderDetail(Long id) {
-        OrderDetail orderDetail =
-                orderDetailRepository.findById(id).orElseThrow(() -> new DataNotFoundException(orderDetailNotFOund));
+        OrderDetail orderDetail = orderDetailRepository
+                .findById(id)
+                .orElseThrow(
+                        () -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.ORDER_DETAIL_NOT_FOUND)));
 
         return orderDetailMapper.toOrderDetailResponse(orderDetail);
     }
@@ -66,16 +68,18 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     public OrderDetailResponse updateOrderDetail(Long id, OrderDetailRequest orderDetailRequest) {
-        OrderDetail existOrderDetail =
-                orderDetailRepository.findById(id).orElseThrow(() -> new DataNotFoundException(orderDetailNotFOund));
+        OrderDetail existOrderDetail = orderDetailRepository
+                .findById(id)
+                .orElseThrow(
+                        () -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.ORDER_DETAIL_NOT_FOUND)));
 
         Order existOrder = orderRepository
                 .findById(orderDetailRequest.getOrderId())
-                .orElseThrow(() -> new DataNotFoundException("Order not found"));
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.ORDER_NOT_FOUND)));
 
         Product existProduct = productRepository
                 .findById(orderDetailRequest.getProductId())
-                .orElseThrow(() -> new DataNotFoundException("Product not found"));
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.PRODUCT_NOT_FOUND)));
 
         orderDetailMapper.updateOrderDetailFromRequest(orderDetailRequest, existOrderDetail);
 
@@ -87,8 +91,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     public void deleteOrderDetail(Long id) {
-        OrderDetail existOrderDetail =
-                orderDetailRepository.findById(id).orElseThrow(() -> new DataNotFoundException(orderDetailNotFOund));
+        OrderDetail existOrderDetail = orderDetailRepository
+                .findById(id)
+                .orElseThrow(
+                        () -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.ORDER_DETAIL_NOT_FOUND)));
 
         orderDetailRepository.delete(existOrderDetail);
     }

@@ -8,6 +8,8 @@ import com.project.shopapp.dto.request.CategoryRequest;
 import com.project.shopapp.model.Category;
 import com.project.shopapp.repository.CategoryRepository;
 import com.project.shopapp.service.CategoryService;
+import com.project.shopapp.utils.MessageKeys;
+import com.project.shopapp.utils.MessageUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -17,6 +19,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRepository;
+    MessageUtils messageUtils;
 
     @Override
     public List<Category> getAllCategories() {
@@ -25,13 +28,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+        return categoryRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException(messageUtils.getMessage(MessageKeys.CATEGORY_NOT_FOUND)));
     }
 
     @Override
     public Category createCategory(CategoryRequest request) {
         if (categoryRepository.existsByName(request.getName())) {
-            throw new RuntimeException("Category already exists");
+            throw new RuntimeException(messageUtils.getMessage(MessageKeys.CATEGORY_ALREADY_EXISTS));
         }
         Category category = Category.builder().name(request.getName()).build();
         return categoryRepository.save(category);
@@ -39,8 +44,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category updateCategory(Long id, CategoryRequest request) {
-        Category existingCategory =
-                categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+        Category existingCategory = categoryRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException(messageUtils.getMessage(MessageKeys.CATEGORY_NOT_FOUND)));
 
         existingCategory.setName(request.getName());
 
@@ -49,8 +55,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(Long id) {
-        Category category =
-                categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+        Category category = categoryRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException(messageUtils.getMessage(MessageKeys.CATEGORY_NOT_FOUND)));
         categoryRepository.delete(category);
     }
 }

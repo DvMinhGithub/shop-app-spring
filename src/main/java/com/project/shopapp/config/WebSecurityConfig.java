@@ -30,13 +30,14 @@ public class WebSecurityConfig {
     private static final String ORDER_DETAILS_ENDPOINT = "/order-details/**";
 
     private final AuthTokenFilter authTokenFilter;
+    private final AuthEntryPointJwt authEntryPointJwt;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(this::configureAuthorization)
-                .exceptionHandling(handling -> handling.authenticationEntryPoint(new AuthEntryPointJwt()))
+                .exceptionHandling(handling -> handling.authenticationEntryPoint(authEntryPointJwt))
                 .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
