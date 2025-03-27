@@ -18,4 +18,6 @@ public class UserLoginRequest {
 
     @NotBlank(message = "Password is required")
     String password;
+
+    Long roleId;
 }

@@ -1,5 +1,7 @@
 package com.project.shopapp.service.impl;
 
+import java.util.Optional;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,6 +68,11 @@ public class UserServiceImpl implements UserService {
         if ((user.getGoogleAccountId() != 0 || user.getFacebookAccountId() != 0)
                 && !passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidPasswordException(messageUtils.getMessage(MessageKeys.INVALID_PASSWORD));
+        }
+
+        Optional<Role> role = roleRepository.findById(request.getRoleId());
+        if (role.isEmpty()) {
+            throw new DataNotFoundException(messageUtils.getMessage(MessageKeys.ROLE_NOT_FOUND));
         }
 
         UsernamePasswordAuthenticationToken authenticationToken =
