@@ -50,6 +50,7 @@ public class MessageKeys {
     public static final String ORDER_DETAIL_NOT_FOUND = "order.detail.not.found";
 
     public static final String FILE_IS_EMPTY = "file.is.empty";
+    public static final String FILE_UPLOAD_FAILED = "file.upload.failed";
 
     public static final String SHIPPING_DATE_MUST_BE_GREATER_THAN_ORDER_DATE =
             "shipping.date.must.be.greater.than.order.date";

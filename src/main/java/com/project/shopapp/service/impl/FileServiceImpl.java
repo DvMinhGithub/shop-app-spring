@@ -27,28 +27,49 @@ public class FileServiceImpl implements FileService {
 
     @NonFinal
     @Value("${file.upload-dir}")
-    protected String uploadDir;
+    private String uploadDir;
+
+    @NonFinal
+    @Value("${server.url}")
+    private String serverUrl;
 
     @Override
     public String storeFile(MultipartFile file) throws IOException {
         if (file.isEmpty()) {
             throw new IOException(messageUtils.getMessage(MessageKeys.FILE_IS_EMPTY));
         }
-        if (Files.notExists(Paths.get(uploadDir))) {
-            Files.createDirectories(Paths.get(uploadDir));
+
+        Path uploadPath = Paths.get(uploadDir);
+        if (Files.notExists(uploadPath)) {
+            Files.createDirectories(uploadPath);
         }
-        String uniqueFileName = UUID.randomUUID().toString() + getExtension(file.getOriginalFilename());
-        Path path = Paths.get(uploadDir + uniqueFileName);
-        Files.write(path, file.getBytes());
-        return path.toString();
+
+        String originalFilename = sanitizeFilename(file.getOriginalFilename());
+        String fileExtension = getExtension(originalFilename);
+        String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
+
+        Path filePath = uploadPath.resolve(uniqueFileName);
+        try {
+            Files.write(filePath, file.getBytes());
+        } catch (IOException e) {
+            throw new IOException(messageUtils.getMessage(MessageKeys.FILE_UPLOAD_FAILED), e);
+        }
+
+        return serverUrl + "/files/" + uniqueFileName;
     }
 
     private String getExtension(String filename) {
-        String extension = "";
-        int i = filename.lastIndexOf('.');
-        if (i > 0) {
-            extension = filename.substring(i);
+        if (filename == null || filename.isEmpty()) {
+            return "";
         }
-        return extension;
+        int lastDotIndex = filename.lastIndexOf('.');
+        if (lastDotIndex == -1) {
+            return "";
+        }
+        return filename.substring(lastDotIndex);
+    }
+
+    private String sanitizeFilename(String filename) {
+        return filename.replaceAll("[^a-zA-Z0-9.-]", "_");
     }
 }

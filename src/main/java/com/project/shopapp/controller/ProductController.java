@@ -27,9 +27,9 @@ public class ProductController {
     private final MessageUtils messageUtils;
 
     @GetMapping
-    public ApiResponse<ProductListResponse> getProducts(@RequestParam int page, @RequestParam int limit) {
-        Pageable pageRequest =
-                PageRequest.of(page - 1, limit);
+    public ApiResponse<ProductListResponse> getProducts(
+            @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int limit) {
+        Pageable pageRequest = PageRequest.of(page - 1, limit);
         return ApiResponse.<ProductListResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message(messageUtils.getMessage(MessageKeys.PRODUCT_LIST_SUCCESS))

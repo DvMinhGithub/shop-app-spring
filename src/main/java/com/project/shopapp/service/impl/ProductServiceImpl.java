@@ -1,11 +1,14 @@
 package com.project.shopapp.service.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.shopapp.dto.request.ProductRequest;
@@ -40,24 +43,21 @@ public class ProductServiceImpl implements ProductService {
     MessageUtils messageUtils;
 
     @Override
+    @Transactional
     public Product createProduct(ProductRequest request) throws IOException {
         Category category = categoryRepository
                 .findById(request.getCategoryId())
-                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.PRODUCT_NOT_FOUND)));
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.CATEGORY_NOT_FOUND)));
+
         Product product = productMapper.toProduct(request);
         product.setCategory(category);
 
         Product savedProduct = productRepository.save(product);
 
         List<MultipartFile> files = request.getThumbnail();
-        if (files != null && !files.isEmpty()) {
-            for (MultipartFile multipartFile : files) {
-                if (multipartFile.isEmpty()) {
-                    continue;
-                }
-                createProductImage(savedProduct.getId(), multipartFile);
-            }
-        }
+        List<ProductImage> productImages = createProductImages(savedProduct, files);
+
+        savedProduct.setThumbnail(productImages);
 
         return savedProduct;
     }
@@ -104,22 +104,31 @@ public class ProductServiceImpl implements ProductService {
         productRepository.delete(product);
     }
 
-    ProductImage createProductImage(Long productId, MultipartFile file) throws IOException {
-        Product product = productRepository
-                .findById(productId)
-                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.PRODUCT_NOT_FOUND)));
+    private List<ProductImage> createProductImages(Product product, List<MultipartFile> files) throws IOException {
+        if (files == null || files.isEmpty()) {
+            return Collections.emptyList();
+        }
 
-        ProductImage productImage = ProductImage.builder()
-                .product(product)
-                .imageUrl(fileServiceImpl.storeFile(file))
-                .build();
-
-        // max 5 images per product
-        if (productImageRepository.findByProductId(productId).size() >= 5) {
+        long existingImageCount = productImageRepository.countByProductId(product.getId());
+        if (existingImageCount + files.size() > 5) {
             throw new RuntimeException(messageUtils.getMessage(MessageKeys.PRODUCT_IMAGE_MAX));
         }
 
-        return productImageRepository.save(productImage);
+        List<ProductImage> productImages = new ArrayList<>();
+        for (MultipartFile file : files) {
+            if (file.isEmpty()) {
+                continue;
+            }
+
+            ProductImage productImage = ProductImage.builder()
+                    .product(product)
+                    .imageUrl(fileServiceImpl.storeFile(file))
+                    .build();
+
+            productImages.add(productImage);
+        }
+
+        return productImageRepository.saveAll(productImages);
     }
 
     public boolean existsByName(String name) {

@@ -8,4 +8,6 @@ import com.project.shopapp.model.ProductImage;
 
 public interface ProductImageRepository extends JpaRepository<ProductImage, Long> {
     List<ProductImage> findByProductId(Long productId);
+
+    Long countByProductId(Long productId);
 }

@@ -22,8 +22,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
-    private static final String[] PUBLIC_POST_ENDPOINTS = {"/users/login", "/users/register"};
-    private static final String[] PUBLIC_GET_ENDPOINTS = {"/products/**", "/categories/**"};
+    private static final String[] PUBLIC_POST_ENDPOINTS = {"/users/login", "/users/register", "/files/**"};
+    private static final String[] PUBLIC_GET_ENDPOINTS = {"/products/**", "/categories/**", "/roles/**", "/files/**"};
     private static final String ORDERS_ENDPOINT = "/orders/**";
     private static final String PRODUCTS_ENDPOINT = "/products/**";
     private static final String CATEGORIES_ENDPOINT = "/categories/**";
@@ -62,8 +62,6 @@ public class WebSecurityConfig {
                 .hasRole(UserRole.ADMIN.name())
 
                 // Products endpoints
-                .requestMatchers(HttpMethod.GET, PRODUCTS_ENDPOINT)
-                .hasAnyRole(UserRole.ADMIN.name(), UserRole.USER.name())
                 .requestMatchers(HttpMethod.POST, PRODUCTS_ENDPOINT)
                 .hasRole(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.PUT, PRODUCTS_ENDPOINT)
