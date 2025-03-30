@@ -71,15 +71,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductListResponse getAllProducts(Pageable pageRequest) {
-        Page<ProductResponse> products = productRepository.findAll(pageRequest).map(product -> {
-            ProductResponse productResponse = productMapper.toProductResponse(product);
-            productResponse.setCategoryId(product.getCategory().getId());
-            productResponse.setThumbnail(product.getThumbnail().stream()
-                    .map(ProductImage::getImageUrl)
-                    .toList());
-            return productResponse;
-        });
+    public ProductListResponse getAllProducts(Long categoryId, String keyword, Pageable pageRequest) {
+        Page<ProductResponse> products = productRepository
+                .searchProducts(categoryId, keyword, pageRequest)
+                .map(product -> {
+                    ProductResponse productResponse = productMapper.toProductResponse(product);
+                    productResponse.setCategoryId(product.getCategory().getId());
+                    productResponse.setThumbnail(product.getThumbnail().stream()
+                            .map(ProductImage::getImageUrl)
+                            .toList());
+                    return productResponse;
+                });
 
         return ProductListResponse.builder()
                 .products(products.getContent())

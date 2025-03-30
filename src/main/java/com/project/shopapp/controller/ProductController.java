@@ -28,12 +28,15 @@ public class ProductController {
 
     @GetMapping
     public ApiResponse<ProductListResponse> getProducts(
-            @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int limit) {
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(defaultValue = "") String keyword,
+            @RequestParam(defaultValue = "0") Long categoryId) {
         Pageable pageRequest = PageRequest.of(page - 1, limit);
         return ApiResponse.<ProductListResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message(messageUtils.getMessage(MessageKeys.PRODUCT_LIST_SUCCESS))
-                .result(productService.getAllProducts(pageRequest))
+                .result(productService.getAllProducts(categoryId, keyword, pageRequest))
                 .build();
     }
 

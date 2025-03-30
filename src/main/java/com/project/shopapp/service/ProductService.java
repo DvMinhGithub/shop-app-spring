@@ -14,7 +14,7 @@ public interface ProductService {
 
     ProductResponse getProductById(Long id);
 
-    ProductListResponse getAllProducts(Pageable pageRequest);
+    ProductListResponse getAllProducts(Long categoryId, String keyword, Pageable pageable);
 
     Product updateProduct(Long id, ProductRequest request);
 
