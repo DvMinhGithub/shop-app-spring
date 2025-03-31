@@ -70,41 +70,41 @@ public class SecurityConfig {
 
                 // Categories
                 .requestMatchers(HttpMethod.GET, CATEGORY_ENDPOINTS)
-                .hasAnyRole(UserRole.ADMIN.name(), UserRole.USER.name())
+                .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
                 .requestMatchers(HttpMethod.POST, CATEGORY_ENDPOINTS)
-                .hasRole(UserRole.ADMIN.name())
+                .hasAuthority(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.PUT, CATEGORY_ENDPOINTS)
-                .hasRole(UserRole.ADMIN.name())
+                .hasAuthority(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.DELETE, CATEGORY_ENDPOINTS)
-                .hasRole(UserRole.ADMIN.name())
+                .hasAuthority(UserRole.ADMIN.name())
 
                 // Products
                 .requestMatchers(HttpMethod.POST, PRODUCT_ENDPOINTS)
-                .hasRole(UserRole.ADMIN.name())
+                .hasAuthority(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.PUT, PRODUCT_ENDPOINTS)
-                .hasRole(UserRole.ADMIN.name())
+                .hasAuthority(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.DELETE, PRODUCT_ENDPOINTS)
-                .hasRole(UserRole.ADMIN.name())
+                .hasAuthority(UserRole.ADMIN.name())
 
                 // Orders
                 .requestMatchers(HttpMethod.POST, ORDER_ENDPOINTS)
-                .hasRole(UserRole.USER.name())
+                .hasAnyAuthority(UserRole.USER.name())
                 .requestMatchers(HttpMethod.GET, ORDER_ENDPOINTS)
-                .hasAnyRole(UserRole.ADMIN.name(), UserRole.USER.name())
+                .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
                 .requestMatchers(HttpMethod.PUT, ORDER_ENDPOINTS)
-                .hasRole(UserRole.ADMIN.name())
+                .hasAuthority(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.DELETE, ORDER_ENDPOINTS)
-                .hasRole(UserRole.ADMIN.name())
+                .hasAuthority(UserRole.ADMIN.name())
 
                 // Order details
                 .requestMatchers(HttpMethod.POST, ORDER_DETAIL_ENDPOINTS)
-                .hasRole(UserRole.USER.name())
+                .hasAuthority(UserRole.USER.name())
                 .requestMatchers(HttpMethod.GET, ORDER_DETAIL_ENDPOINTS)
-                .hasAnyRole(UserRole.ADMIN.name(), UserRole.USER.name())
+                .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
                 .requestMatchers(HttpMethod.PUT, ORDER_DETAIL_ENDPOINTS)
-                .hasRole(UserRole.ADMIN.name())
+                .hasAuthority(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.DELETE, ORDER_DETAIL_ENDPOINTS)
-                .hasRole(UserRole.ADMIN.name())
+                .hasAuthority(UserRole.ADMIN.name())
                 .anyRequest()
                 .authenticated();
     }

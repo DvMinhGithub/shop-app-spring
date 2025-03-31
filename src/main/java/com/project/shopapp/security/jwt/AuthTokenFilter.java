@@ -5,11 +5,11 @@ import java.io.IOException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.project.shopapp.model.entity.User;
+import com.project.shopapp.security.CustomUserDetailsService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class AuthTokenFilter extends OncePerRequestFilter {
 
-    private final UserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
     private final JwtUtils jwtUtil;
 
     @Override
@@ -42,7 +42,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         try {
             if (phoneNumber != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                User existingUser = (User) userDetailsService.loadUserByUsername(phoneNumber);
+                UserDetails existingUser = userDetailsService.loadUserByUsername(phoneNumber);
 
                 if (existingUser != null && jwtUtil.validateToken(token, existingUser)) {
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
