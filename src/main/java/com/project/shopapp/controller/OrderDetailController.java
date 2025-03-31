@@ -1,5 +1,7 @@
 package com.project.shopapp.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +32,8 @@ public class OrderDetailController {
     }
 
     @GetMapping("/{orderDetailId}")
-    public ApiResponse<?> getOrderDetail(@PathVariable Long orderDetailId) {
-        return ApiResponse.builder()
+    public ApiResponse<OrderDetailResponse> getOrderDetail(@PathVariable Long orderDetailId) {
+        return ApiResponse.<OrderDetailResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message(messageUtils.getMessage(MessageKeys.ORDER_DETAIL_GET_SUCCESS))
                 .result(orderDetailService.getOrderDetail(orderDetailId))
@@ -39,8 +41,8 @@ public class OrderDetailController {
     }
 
     @GetMapping("/order/{orderId}")
-    public ApiResponse<?> getOrderDetailByOrderId(@PathVariable Long orderId) {
-        return ApiResponse.builder()
+    public ApiResponse<List<OrderDetailResponse>> getOrderDetailByOrderId(@PathVariable Long orderId) {
+        return ApiResponse.<List<OrderDetailResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message(messageUtils.getMessage(MessageKeys.ORDER_DETAIL_LIST_BY_ORDER_SUCCESS))
                 .result(orderDetailService.getAllOrderDetails(orderId))
@@ -58,8 +60,8 @@ public class OrderDetailController {
     }
 
     @DeleteMapping("/{orderDetailId}")
-    public ApiResponse<?> deleteOrderDetail(@PathVariable Long orderDetailId) {
-        return ApiResponse.builder()
+    public ApiResponse<Void> deleteOrderDetail(@PathVariable Long orderDetailId) {
+        return ApiResponse.<Void>builder()
                 .code(HttpStatus.NO_CONTENT.value())
                 .message(messageUtils.getMessage(MessageKeys.ORDER_DETAIL_DELETE_SUCCESS))
                 .build();

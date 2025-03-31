@@ -31,7 +31,7 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
         response.setStatus(401);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        ApiResponse<?> apiResponse = ApiResponse.builder()
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
                 .code(401)
                 .message(messageUtils.getMessage(MessageKeys.UNAUTHORIZED))
                 .build();

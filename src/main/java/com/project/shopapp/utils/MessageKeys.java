@@ -2,6 +2,8 @@ package com.project.shopapp.utils;
 
 public class MessageKeys {
 
+    private MessageKeys() {}
+
     public static final String USER_ALREADY_EXISTS = "user.already.exists";
     public static final String ROLE_NOT_FOUND = "role.not.found";
     public static final String USER_NOT_FOUND = "user.not.found";

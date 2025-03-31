@@ -62,9 +62,9 @@ public class OrderController {
     }
 
     @DeleteMapping("/{orderId}")
-    public ApiResponse<?> deleteOrder(@PathVariable Long orderId) {
+    public ApiResponse<Void> deleteOrder(@PathVariable Long orderId) {
         orderService.deleteOrder(orderId);
-        return ApiResponse.builder()
+        return ApiResponse.<Void>builder()
                 .code(HttpStatus.NO_CONTENT.value())
                 .message(messageUtils.getMessage(MessageKeys.ORDER_DELETE_SUCCESS))
                 .build();

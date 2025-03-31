@@ -44,8 +44,14 @@ public class FileServiceImpl implements FileService {
             Files.createDirectories(uploadPath);
         }
 
+        if (file.getOriginalFilename() == null) {
+            throw new IOException(messageUtils.getMessage(MessageKeys.FILE_UPLOAD_FAILED));
+        }
         String originalFilename = sanitizeFilename(file.getOriginalFilename());
-        String fileExtension = getExtension(originalFilename);
+        String fileExtension = "";
+        if (originalFilename.isEmpty()) {
+            fileExtension = getExtension(originalFilename);
+        }
         String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
 
         Path filePath = uploadPath.resolve(uniqueFileName);

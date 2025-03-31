@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.shopapp.exception.DataNotFoundException;
+import com.project.shopapp.exception.ImageUploadException;
 import com.project.shopapp.mapper.ProductMapper;
 import com.project.shopapp.model.dto.request.ProductRequest;
 import com.project.shopapp.model.dto.response.ProductListResponse;
@@ -122,7 +123,7 @@ public class ProductServiceImpl implements ProductService {
 
         long existingImageCount = productImageRepository.countByProductId(product.getId());
         if (existingImageCount + files.size() > 5) {
-            throw new RuntimeException(messageUtils.getMessage(MessageKeys.PRODUCT_IMAGE_MAX));
+            throw new ImageUploadException(messageUtils.getMessage(MessageKeys.PRODUCT_IMAGE_MAX));
         }
 
         List<ProductImage> productImages = new ArrayList<>();

@@ -26,16 +26,18 @@ public class JwtUtils {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
+    private static final String PHONE_NUMBER = "phoneNumber";
+
     public String generateToken(User user) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expiration);
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put("phoneNumber", user.getPhoneNumber());
+        claims.put(PHONE_NUMBER, user.getPhoneNumber());
 
         return Jwts.builder()
                 .setSubject(user.getPhoneNumber())
-                .claim("phoneNumber", user.getPhoneNumber())
+                .claim(PHONE_NUMBER, user.getPhoneNumber())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -51,7 +53,7 @@ public class JwtUtils {
     }
 
     public boolean validateToken(String token, UserDetails user) {
-        String phoneNumber = getClaims(token).get("phoneNumber", String.class);
+        String phoneNumber = getClaims(token).get(PHONE_NUMBER, String.class);
         return phoneNumber.equals(user.getUsername()) && !isTokenExpired(token);
     }
 

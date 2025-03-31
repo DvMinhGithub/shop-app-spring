@@ -40,7 +40,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order createOrder(OrderRequest request) {
-        System.out.println("OrderServiceImpl.createOrder()");
         User user = userRepository
                 .findById(request.getUserId())
                 .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.USER_NOT_FOUND)));
@@ -112,8 +111,6 @@ public class OrderServiceImpl implements OrderService {
 
         existOrder.setUser(existUser);
         existOrder.setShippingDate(shippingDate);
-        // existOrder.setTotalPrice(request.getTotalPrice());
-        // existOrder.setOrderStatus(request.getOrderStatus());
 
         return orderRepository.save(existOrder);
     }

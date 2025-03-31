@@ -1,5 +1,7 @@
 package com.project.shopapp.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,8 +39,8 @@ public class RoleController {
     }
 
     @GetMapping
-    public ApiResponse<?> getRoles() {
-        return ApiResponse.builder()
+    public ApiResponse<List<Role>> getRoles() {
+        return ApiResponse.<List<Role>>builder()
                 .code(HttpStatus.OK.value())
                 .message(messageUtils.getMessage(MessageKeys.ROLE_LIST_SUCCESS))
                 .result(roleService.getRoles())
@@ -55,9 +57,9 @@ public class RoleController {
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<?> deleteRole(@PathVariable Long id) {
+    public ApiResponse<Void> deleteRole(@PathVariable Long id) {
         roleService.deleteRole(id);
-        return ApiResponse.builder()
+        return ApiResponse.<Void>builder()
                 .code(HttpStatus.NO_CONTENT.value())
                 .message(MessageKeys.ROLE_DELETE_SUCCESS)
                 .build();

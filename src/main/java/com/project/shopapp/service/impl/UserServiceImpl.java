@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.project.shopapp.exception.DataNotFoundException;
+import com.project.shopapp.exception.DuplicateEntryException;
 import com.project.shopapp.exception.InvalidPasswordException;
 import com.project.shopapp.mapper.UserMapper;
 import com.project.shopapp.model.dto.request.UserCreateRequest;
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
     public User createUser(UserCreateRequest request) {
         String phoneNumber = request.getPhoneNumber();
         if (userRepository.existsByPhoneNumber(phoneNumber)) {
-            throw new RuntimeException(messageUtils.getMessage(MessageKeys.USER_ALREADY_EXISTS));
+            throw new DuplicateEntryException(messageUtils.getMessage(MessageKeys.USER_ALREADY_EXISTS));
         }
         Role role = roleRepository
                 .findByName(UserRole.USER.name())

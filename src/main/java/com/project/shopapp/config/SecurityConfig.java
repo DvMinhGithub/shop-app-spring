@@ -25,11 +25,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final AuthTokenFilter authTokenFilter;
-    private final AuthEntryPoint AuthEntryPoint;
+    private final AuthEntryPoint authEntryPoint;
+
+    private static final String PRODUCT_ENDPOINTS = "/products/**";
+    private static final String CATEGORY_ENDPOINTS = "/categories/**";
+    private static final String ORDER_ENDPOINTS = "/orders/**";
+    private static final String ORDER_DETAIL_ENDPOINTS = "/order-details/**";
 
     private static final String[] PUBLIC_POST_ENDPOINTS = {"/users/login", "/users/register", "/files/**"};
 
-    private static final String[] PUBLIC_GET_ENDPOINTS = {"/products/**", "/categories/**", "/roles/**", "/files/**"};
+    private static final String[] PUBLIC_GET_ENDPOINTS = {
+        PRODUCT_ENDPOINTS, CATEGORY_ENDPOINTS, "/roles/**", "/files/**"
+    };
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -46,7 +53,7 @@ public class SecurityConfig {
         http.cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(this::configureAuthorization)
-                .exceptionHandling(handling -> handling.authenticationEntryPoint(AuthEntryPoint))
+                .exceptionHandling(handling -> handling.authenticationEntryPoint(authEntryPoint))
                 .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -62,41 +69,41 @@ public class SecurityConfig {
                 .permitAll()
 
                 // Categories
-                .requestMatchers(HttpMethod.GET, "/categories/**")
+                .requestMatchers(HttpMethod.GET, CATEGORY_ENDPOINTS)
                 .hasAnyRole(UserRole.ADMIN.name(), UserRole.USER.name())
-                .requestMatchers(HttpMethod.POST, "/categories/**")
+                .requestMatchers(HttpMethod.POST, CATEGORY_ENDPOINTS)
                 .hasRole(UserRole.ADMIN.name())
-                .requestMatchers(HttpMethod.PUT, "/categories/**")
+                .requestMatchers(HttpMethod.PUT, CATEGORY_ENDPOINTS)
                 .hasRole(UserRole.ADMIN.name())
-                .requestMatchers(HttpMethod.DELETE, "/categories/**")
+                .requestMatchers(HttpMethod.DELETE, CATEGORY_ENDPOINTS)
                 .hasRole(UserRole.ADMIN.name())
 
                 // Products
-                .requestMatchers(HttpMethod.POST, "/products/**")
+                .requestMatchers(HttpMethod.POST, PRODUCT_ENDPOINTS)
                 .hasRole(UserRole.ADMIN.name())
-                .requestMatchers(HttpMethod.PUT, "/products/**")
+                .requestMatchers(HttpMethod.PUT, PRODUCT_ENDPOINTS)
                 .hasRole(UserRole.ADMIN.name())
-                .requestMatchers(HttpMethod.DELETE, "/products/**")
+                .requestMatchers(HttpMethod.DELETE, PRODUCT_ENDPOINTS)
                 .hasRole(UserRole.ADMIN.name())
 
                 // Orders
-                .requestMatchers(HttpMethod.POST, "/orders/**")
+                .requestMatchers(HttpMethod.POST, ORDER_ENDPOINTS)
                 .hasRole(UserRole.USER.name())
-                .requestMatchers(HttpMethod.GET, "/orders/**")
+                .requestMatchers(HttpMethod.GET, ORDER_ENDPOINTS)
                 .hasAnyRole(UserRole.ADMIN.name(), UserRole.USER.name())
-                .requestMatchers(HttpMethod.PUT, "/orders/**")
+                .requestMatchers(HttpMethod.PUT, ORDER_ENDPOINTS)
                 .hasRole(UserRole.ADMIN.name())
-                .requestMatchers(HttpMethod.DELETE, "/orders/**")
+                .requestMatchers(HttpMethod.DELETE, ORDER_ENDPOINTS)
                 .hasRole(UserRole.ADMIN.name())
 
                 // Order details
-                .requestMatchers(HttpMethod.POST, "/order-details/**")
+                .requestMatchers(HttpMethod.POST, ORDER_DETAIL_ENDPOINTS)
                 .hasRole(UserRole.USER.name())
-                .requestMatchers(HttpMethod.GET, "/order-details/**")
+                .requestMatchers(HttpMethod.GET, ORDER_DETAIL_ENDPOINTS)
                 .hasAnyRole(UserRole.ADMIN.name(), UserRole.USER.name())
-                .requestMatchers(HttpMethod.PUT, "/order-details/**")
+                .requestMatchers(HttpMethod.PUT, ORDER_DETAIL_ENDPOINTS)
                 .hasRole(UserRole.ADMIN.name())
-                .requestMatchers(HttpMethod.DELETE, "/order-details/**")
+                .requestMatchers(HttpMethod.DELETE, ORDER_DETAIL_ENDPOINTS)
                 .hasRole(UserRole.ADMIN.name())
                 .anyRequest()
                 .authenticated();

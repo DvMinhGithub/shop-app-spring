@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.project.shopapp.exception.DuplicateEntryException;
 import com.project.shopapp.model.dto.request.CategoryRequest;
 import com.project.shopapp.model.entity.Category;
 import com.project.shopapp.repository.CategoryRepository;
@@ -36,7 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category createCategory(CategoryRequest request) {
         if (categoryRepository.existsByName(request.getName())) {
-            throw new RuntimeException(messageUtils.getMessage(MessageKeys.CATEGORY_ALREADY_EXISTS));
+            throw new DuplicateEntryException(messageUtils.getMessage(MessageKeys.CATEGORY_ALREADY_EXISTS));
         }
         Category category = Category.builder().name(request.getName()).build();
         return categoryRepository.save(category);
