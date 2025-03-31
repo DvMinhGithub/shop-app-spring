@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.project.shopapp.model.Product;
+import com.project.shopapp.model.entity.Product;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {

@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 
-import com.project.shopapp.dto.request.ProductRequest;
-import com.project.shopapp.dto.response.ProductListResponse;
-import com.project.shopapp.dto.response.ProductResponse;
-import com.project.shopapp.model.Product;
+import com.project.shopapp.model.dto.request.ProductRequest;
+import com.project.shopapp.model.dto.response.ProductListResponse;
+import com.project.shopapp.model.dto.response.ProductResponse;
+import com.project.shopapp.model.entity.Product;
 
 public interface ProductService {
     Product createProduct(ProductRequest request) throws IOException;

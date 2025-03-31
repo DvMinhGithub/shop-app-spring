@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.shopapp.dto.request.CategoryRequest;
-import com.project.shopapp.dto.response.ApiResponse;
-import com.project.shopapp.model.Category;
+import com.project.shopapp.model.dto.request.CategoryRequest;
+import com.project.shopapp.model.dto.response.ApiResponse;
+import com.project.shopapp.model.entity.Category;
 import com.project.shopapp.service.impl.CategoryServiceImpl;
 import com.project.shopapp.utils.MessageKeys;
 import com.project.shopapp.utils.MessageUtils;

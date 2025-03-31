@@ -5,18 +5,18 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.project.shopapp.config.JwtUtils;
-import com.project.shopapp.dto.request.UserCreateRequest;
-import com.project.shopapp.dto.request.UserLoginRequest;
-import com.project.shopapp.dto.response.LoginResponse;
-import com.project.shopapp.enums.UserRole;
 import com.project.shopapp.exception.DataNotFoundException;
 import com.project.shopapp.exception.InvalidPasswordException;
 import com.project.shopapp.mapper.UserMapper;
-import com.project.shopapp.model.Role;
-import com.project.shopapp.model.User;
+import com.project.shopapp.model.dto.request.UserCreateRequest;
+import com.project.shopapp.model.dto.request.UserLoginRequest;
+import com.project.shopapp.model.dto.response.LoginResponse;
+import com.project.shopapp.model.entity.Role;
+import com.project.shopapp.model.entity.User;
+import com.project.shopapp.model.enums.UserRole;
 import com.project.shopapp.repository.RoleRepository;
 import com.project.shopapp.repository.UserRepository;
+import com.project.shopapp.security.jwt.JwtUtils;
 import com.project.shopapp.service.UserService;
 import com.project.shopapp.utils.MessageKeys;
 import com.project.shopapp.utils.MessageUtils;

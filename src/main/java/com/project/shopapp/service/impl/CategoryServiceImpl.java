@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.project.shopapp.dto.request.CategoryRequest;
-import com.project.shopapp.model.Category;
+import com.project.shopapp.model.dto.request.CategoryRequest;
+import com.project.shopapp.model.entity.Category;
 import com.project.shopapp.repository.CategoryRepository;
 import com.project.shopapp.service.CategoryService;
 import com.project.shopapp.utils.MessageKeys;

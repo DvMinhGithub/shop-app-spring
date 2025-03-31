@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.project.shopapp.dto.request.RoleRequest;
-import com.project.shopapp.model.Role;
+import com.project.shopapp.model.dto.request.RoleRequest;
+import com.project.shopapp.model.entity.Role;
 import com.project.shopapp.repository.RoleRepository;
 import com.project.shopapp.service.RoleService;
 import com.project.shopapp.utils.MessageKeys;

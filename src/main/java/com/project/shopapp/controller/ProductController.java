@@ -9,11 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import com.github.javafaker.Faker;
-import com.project.shopapp.dto.request.ProductRequest;
-import com.project.shopapp.dto.response.ApiResponse;
-import com.project.shopapp.dto.response.ProductListResponse;
-import com.project.shopapp.dto.response.ProductResponse;
-import com.project.shopapp.model.Product;
+import com.project.shopapp.model.dto.request.ProductRequest;
+import com.project.shopapp.model.dto.response.ApiResponse;
+import com.project.shopapp.model.dto.response.ProductListResponse;
+import com.project.shopapp.model.dto.response.ProductResponse;
+import com.project.shopapp.model.entity.Product;
 import com.project.shopapp.service.impl.ProductServiceImpl;
 import com.project.shopapp.utils.MessageKeys;
 import com.project.shopapp.utils.MessageUtils;

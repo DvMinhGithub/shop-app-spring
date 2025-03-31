@@ -7,15 +7,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import com.project.shopapp.dto.request.ProductRequest;
-import com.project.shopapp.dto.response.ProductResponse;
-import com.project.shopapp.model.Product;
-import com.project.shopapp.model.ProductImage;
+import com.project.shopapp.model.dto.request.ProductRequest;
+import com.project.shopapp.model.dto.response.ProductResponse;
+import com.project.shopapp.model.entity.Product;
+import com.project.shopapp.model.entity.ProductImage;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "thumbnail", ignore = true)
     @Mapping(target = "category", ignore = true)

@@ -6,7 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.project.shopapp.dto.response.ApiResponse;
+import com.project.shopapp.model.dto.response.ApiResponse;
 import com.project.shopapp.utils.MessageKeys;
 import com.project.shopapp.utils.MessageUtils;
 
@@ -23,9 +23,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handleRuntimeException(RuntimeException e) {
         log.error("Exception caught", e);
         String baseMessage = messageUtils.getMessage(MessageKeys.ERROR_INTERNAL_SERVER);
-        String detailedMessage = e.getMessage();
+        log.error("Detailed error message: {}", e.getMessage());
         ApiResponse<?> response =
-                new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), baseMessage + detailedMessage, null);
+                new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), baseMessage, null);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 

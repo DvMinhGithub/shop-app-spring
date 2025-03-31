@@ -2,8 +2,8 @@ package com.project.shopapp.service;
 
 import java.util.List;
 
-import com.project.shopapp.dto.request.OrderDetailRequest;
-import com.project.shopapp.dto.response.OrderDetailResponse;
+import com.project.shopapp.model.dto.request.OrderDetailRequest;
+import com.project.shopapp.model.dto.response.OrderDetailResponse;
 
 public interface OrderDetailService {
     OrderDetailResponse createOrderDetail(OrderDetailRequest orderDetailRequest);

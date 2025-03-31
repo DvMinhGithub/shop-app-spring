@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.project.shopapp.dto.request.OrderRequest;
-import com.project.shopapp.dto.response.ApiResponse;
-import com.project.shopapp.model.Order;
+import com.project.shopapp.model.dto.request.OrderRequest;
+import com.project.shopapp.model.dto.response.ApiResponse;
+import com.project.shopapp.model.entity.Order;
 import com.project.shopapp.service.impl.OrderServiceImpl;
 import com.project.shopapp.utils.MessageKeys;
 import com.project.shopapp.utils.MessageUtils;

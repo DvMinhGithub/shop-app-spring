@@ -3,9 +3,9 @@ package com.project.shopapp.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.project.shopapp.dto.request.OrderDetailRequest;
-import com.project.shopapp.dto.response.ApiResponse;
-import com.project.shopapp.dto.response.OrderDetailResponse;
+import com.project.shopapp.model.dto.request.OrderDetailRequest;
+import com.project.shopapp.model.dto.response.ApiResponse;
+import com.project.shopapp.model.dto.response.OrderDetailResponse;
 import com.project.shopapp.service.impl.OrderDetailServiceImpl;
 import com.project.shopapp.utils.MessageKeys;
 import com.project.shopapp.utils.MessageUtils;
