@@ -90,6 +90,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductResponse> getProductByIds(String ids) {
+        List<Long> productIds =
+                List.of(ids.split(",")).stream().map(Long::parseLong).toList();
+        return productRepository.getProductByIds(productIds).stream()
+                .map(productMapper::toProductResponse)
+                .toList();
+    }
+
+    @Override
     public Product updateProduct(Long id, ProductRequest request) {
         Product product = productRepository
                 .findById(id)

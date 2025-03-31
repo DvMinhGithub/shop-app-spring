@@ -1,6 +1,7 @@
 package com.project.shopapp.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 
@@ -13,6 +14,8 @@ public interface ProductService {
     Product createProduct(ProductRequest request) throws IOException;
 
     ProductResponse getProductById(Long id);
+
+    List<ProductResponse> getProductByIds(String ids);
 
     ProductListResponse getAllProducts(Long categoryId, String keyword, Pageable pageable);
 

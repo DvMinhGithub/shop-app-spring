@@ -37,7 +37,7 @@ public class Product extends BaseEntity {
     String name;
 
     String description;
-    Double price;
+    Float price;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference

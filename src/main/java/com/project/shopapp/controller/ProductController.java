@@ -1,6 +1,7 @@
 package com.project.shopapp.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +47,15 @@ public class ProductController {
                 .code(HttpStatus.OK.value())
                 .message(messageUtils.getMessage(MessageKeys.PRODUCT_DETAIL_SUCCESS))
                 .result(productService.getProductById(id))
+                .build();
+    }
+
+    @GetMapping("/ids")
+    public ApiResponse<List<ProductResponse>> getProductsByIds(@RequestParam("ids") String ids) {
+        return ApiResponse.<List<ProductResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message(messageUtils.getMessage(MessageKeys.PRODUCT_LIST_SUCCESS))
+                .result(productService.getProductByIds(ids))
                 .build();
     }
 
