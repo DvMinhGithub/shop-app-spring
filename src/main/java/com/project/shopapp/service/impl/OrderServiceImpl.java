@@ -4,13 +4,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.project.shopapp.dto.request.CartItemRequest;
 import com.project.shopapp.dto.request.OrderRequest;
+import com.project.shopapp.enums.OrderStatus;
 import com.project.shopapp.exception.DataNotFoundException;
 import com.project.shopapp.mapper.OrderMapper;
 import com.project.shopapp.model.Order;
+import com.project.shopapp.model.OrderDetail;
+import com.project.shopapp.model.Product;
 import com.project.shopapp.model.User;
+import com.project.shopapp.repository.OrderDetailRepository;
 import com.project.shopapp.repository.OrderRepository;
+import com.project.shopapp.repository.ProductRepository;
 import com.project.shopapp.repository.UserRepository;
 import com.project.shopapp.service.OrderService;
 import com.project.shopapp.utils.MessageKeys;
@@ -25,11 +32,15 @@ import lombok.experimental.FieldDefaults;
 public class OrderServiceImpl implements OrderService {
     UserRepository userRepository;
     OrderRepository orderRepository;
+    OrderDetailRepository orderDetailRepository;
+    ProductRepository productRepository;
     MessageUtils messageUtils;
     OrderMapper orderMapper;
 
     @Override
+    @Transactional
     public Order createOrder(OrderRequest request) {
+        System.out.println("OrderServiceImpl.createOrder()");
         User user = userRepository
                 .findById(request.getUserId())
                 .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.USER_NOT_FOUND)));
@@ -45,8 +56,28 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderMapper.toOrder(request);
         order.setUser(user);
         order.setShippingDate(shippingDate);
+        order.setActive(true);
+        order.setStatus(OrderStatus.PENDING);
 
-        return orderRepository.save(order);
+        orderRepository.save(order);
+
+        for (CartItemRequest cartItemRequest : request.getCartItems()) {
+            Product product = productRepository
+                    .findById(cartItemRequest.getProductId())
+                    .orElseThrow(() -> new DataNotFoundException(
+                            messageUtils.getMessage(MessageKeys.PRODUCT_NOT_FOUND, cartItemRequest.getProductId())));
+
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setOrder(order);
+            orderDetail.setQuantity(cartItemRequest.getQuantity());
+            orderDetail.setPrice(product.getPrice());
+            orderDetail.setTotalMoney(product.getPrice() * cartItemRequest.getQuantity());
+            orderDetail.setProduct(product);
+
+            orderDetailRepository.save(orderDetail);
+        }
+
+        return order;
     }
 
     @Override

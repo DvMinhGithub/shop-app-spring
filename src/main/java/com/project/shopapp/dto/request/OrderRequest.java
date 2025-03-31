@@ -2,6 +2,7 @@ package com.project.shopapp.dto.request;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.project.shopapp.enums.OrderStatus;
 
@@ -46,4 +47,6 @@ public class OrderRequest {
     String shippingAddress;
     LocalDateTime shippingDate;
     String paymentMethod;
+
+    List<CartItemRequest> cartItems;
 }

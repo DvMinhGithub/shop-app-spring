@@ -38,7 +38,7 @@ public class OrderDetail {
     Long quantity;
 
     @Column(nullable = false)
-    Long totalMoney;
+    Float totalMoney;
 
     String color;
 }
