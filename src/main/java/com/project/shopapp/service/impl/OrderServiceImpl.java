@@ -10,6 +10,7 @@ import com.project.shopapp.exception.DataNotFoundException;
 import com.project.shopapp.mapper.OrderMapper;
 import com.project.shopapp.model.dto.request.CartItemRequest;
 import com.project.shopapp.model.dto.request.OrderRequest;
+import com.project.shopapp.model.dto.response.OrderResponse;
 import com.project.shopapp.model.entity.Order;
 import com.project.shopapp.model.entity.OrderDetail;
 import com.project.shopapp.model.entity.Product;
@@ -39,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order createOrder(OrderRequest request) {
+    public OrderResponse createOrder(OrderRequest request) {
         User user = userRepository
                 .findById(request.getUserId())
                 .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.USER_NOT_FOUND)));
@@ -76,21 +77,26 @@ public class OrderServiceImpl implements OrderService {
             orderDetailRepository.save(orderDetail);
         }
 
-        return order;
+        return orderMapper.toOrderResponse(order);
     }
 
     @Override
-    public List<Order> findByUserId(Long userId) {
-        return orderRepository.findAllByUserId(userId);
+    public List<OrderResponse> findByUserId(Long userId) {
+        return orderRepository.findAllByUserId(userId).stream()
+                .map(orderMapper::toOrderResponse)
+                .toList();
     }
 
     @Override
-    public Order getOrder(Long orderId) {
-        return orderRepository.findById(orderId).orElse(null);
+    public OrderResponse getOrder(Long orderId) {
+        return orderRepository
+                .findById(orderId)
+                .map(orderMapper::toOrderResponse)
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.ORDER_NOT_FOUND)));
     }
 
     @Override
-    public Order updateOrder(Long id, OrderRequest request) {
+    public OrderResponse updateOrder(Long id, OrderRequest request) {
         Order existOrder = orderRepository
                 .findById(id)
                 .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.ORDER_NOT_FOUND)));
@@ -112,7 +118,7 @@ public class OrderServiceImpl implements OrderService {
         existOrder.setUser(existUser);
         existOrder.setShippingDate(shippingDate);
 
-        return orderRepository.save(existOrder);
+        return orderMapper.toOrderResponse(orderRepository.save(existOrder));
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.project.shopapp.model.dto.response;
 
+import com.project.shopapp.model.entity.Product;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +18,7 @@ import lombok.experimental.FieldDefaults;
 public class OrderDetailResponse {
     Long id;
     Long orderId;
-    Long productId;
+    Product product;
     Float price;
     Long quantity;
     Long totalMoney;

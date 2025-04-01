@@ -16,7 +16,6 @@ public interface OrderDetailMapper {
     OrderDetail toOrderDetail(OrderDetailRequest request);
 
     @Mapping(target = "orderId", source = "order.id")
-    @Mapping(target = "productId", source = "product.id")
     OrderDetailResponse toOrderDetailResponse(OrderDetail orderDetail);
 
     @Mapping(target = "id", ignore = true)

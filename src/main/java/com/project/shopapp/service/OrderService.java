@@ -3,16 +3,16 @@ package com.project.shopapp.service;
 import java.util.List;
 
 import com.project.shopapp.model.dto.request.OrderRequest;
-import com.project.shopapp.model.entity.Order;
+import com.project.shopapp.model.dto.response.OrderResponse;
 
 public interface OrderService {
-    Order createOrder(OrderRequest request);
+    OrderResponse createOrder(OrderRequest request);
 
-    List<Order> findByUserId(Long userId);
+    List<OrderResponse> findByUserId(Long userId);
 
-    Order getOrder(Long id);
+    OrderResponse getOrder(Long id);
 
-    Order updateOrder(Long id, OrderRequest request);
+    OrderResponse updateOrder(Long id, OrderRequest request);
 
     void deleteOrder(Long id);
 }

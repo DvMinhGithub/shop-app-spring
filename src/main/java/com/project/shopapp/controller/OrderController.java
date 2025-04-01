@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.project.shopapp.model.dto.request.OrderRequest;
 import com.project.shopapp.model.dto.response.ApiResponse;
-import com.project.shopapp.model.entity.Order;
+import com.project.shopapp.model.dto.response.OrderResponse;
 import com.project.shopapp.service.impl.OrderServiceImpl;
 import com.project.shopapp.utils.MessageKeys;
 import com.project.shopapp.utils.MessageUtils;
@@ -25,8 +25,8 @@ public class OrderController {
     MessageUtils messageUtils;
 
     @PostMapping
-    public ApiResponse<Order> createOrder(@RequestBody @Valid OrderRequest request) {
-        return ApiResponse.<Order>builder()
+    public ApiResponse<OrderResponse> createOrder(@RequestBody @Valid OrderRequest request) {
+        return ApiResponse.<OrderResponse>builder()
                 .code(HttpStatus.CREATED.value())
                 .message(messageUtils.getMessage(MessageKeys.ORDER_CREATE_SUCCESS))
                 .result(orderService.createOrder(request))
@@ -34,9 +34,9 @@ public class OrderController {
     }
 
     @GetMapping("/user/{userId}")
-    public ApiResponse<List<Order>> getOrdersByUserId(@PathVariable Long userId) {
+    public ApiResponse<List<OrderResponse>> getOrdersByUserId(@PathVariable Long userId) {
 
-        return ApiResponse.<List<Order>>builder()
+        return ApiResponse.<List<OrderResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message(messageUtils.getMessage(MessageKeys.ORDER_LIST_BY_USER_SUCCESS))
                 .result(orderService.findByUserId(userId))
@@ -44,8 +44,8 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public ApiResponse<Order> getOrder(@PathVariable Long orderId) {
-        return ApiResponse.<Order>builder()
+    public ApiResponse<OrderResponse> getOrder(@PathVariable Long orderId) {
+        return ApiResponse.<OrderResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message(messageUtils.getMessage(MessageKeys.ORDER_DETAIL_SUCCESS))
                 .result(orderService.getOrder(orderId))
@@ -53,8 +53,9 @@ public class OrderController {
     }
 
     @PutMapping("/{orderId}")
-    public ApiResponse<Order> updateOrder(@PathVariable Long orderId, @RequestBody @Valid OrderRequest request) {
-        return ApiResponse.<Order>builder()
+    public ApiResponse<OrderResponse> updateOrder(
+            @PathVariable Long orderId, @RequestBody @Valid OrderRequest request) {
+        return ApiResponse.<OrderResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message(messageUtils.getMessage(MessageKeys.ORDER_UPDATE_SUCCESS))
                 .result(orderService.updateOrder(orderId, request))
