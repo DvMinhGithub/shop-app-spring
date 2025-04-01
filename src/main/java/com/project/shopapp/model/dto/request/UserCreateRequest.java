@@ -3,6 +3,7 @@ package com.project.shopapp.model.dto.request;
 import java.sql.Date;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class UserCreateRequest {
     String fullName;
 
     @NotBlank(message = "Phone number is required")
+    @Pattern(regexp = "0[0-9]{9}")
     String phoneNumber;
 
     String address;

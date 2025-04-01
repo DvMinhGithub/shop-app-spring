@@ -9,6 +9,7 @@ import com.project.shopapp.exception.DataNotFoundException;
 import com.project.shopapp.exception.DuplicateEntryException;
 import com.project.shopapp.exception.InvalidPasswordException;
 import com.project.shopapp.mapper.UserMapper;
+import com.project.shopapp.model.dto.request.UpdateUserRequest;
 import com.project.shopapp.model.dto.request.UserCreateRequest;
 import com.project.shopapp.model.dto.request.UserLoginRequest;
 import com.project.shopapp.model.dto.response.LoginResponse;
@@ -87,5 +88,21 @@ public class UserServiceImpl implements UserService {
                 .findById(userId)
                 .map(userMapper::toUserResponse)
                 .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.USER_NOT_FOUND)));
+    }
+
+    @Override
+    public void updateUser(UpdateUserRequest request) {
+        Long userId = customUserDetailsService.getCurrentUserId();
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.USER_NOT_FOUND)));
+
+        if (userRepository.existsByPhoneNumber(request.getPhoneNumber())
+                && !user.getPhoneNumber().equals(request.getPhoneNumber())) {
+            throw new DuplicateEntryException(messageUtils.getMessage(MessageKeys.PHONE_NUMBER_ALREADY_USE));
+        }
+
+        userMapper.updateUserFromRequest(request, user);
+        userRepository.save(user);
     }
 }

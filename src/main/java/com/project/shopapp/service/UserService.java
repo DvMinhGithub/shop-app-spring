@@ -1,5 +1,6 @@
 package com.project.shopapp.service;
 
+import com.project.shopapp.model.dto.request.UpdateUserRequest;
 import com.project.shopapp.model.dto.request.UserCreateRequest;
 import com.project.shopapp.model.dto.request.UserLoginRequest;
 import com.project.shopapp.model.dto.response.LoginResponse;
@@ -12,4 +13,6 @@ public interface UserService {
     LoginResponse login(UserLoginRequest request);
 
     UserResponse getUserDetails();
+
+    void updateUser(UpdateUserRequest request);
 }

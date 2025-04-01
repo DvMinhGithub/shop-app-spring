@@ -59,4 +59,6 @@ public class MessageKeys {
 
     public static final String UNAUTHORIZED = "unauthorized";
     public static final String USER_DETAILS_FETCHED = "user.details.fetched";
+    public static final String USER_UPDATED = "user.updated";
+    public static final String PHONE_NUMBER_ALREADY_USE = "phone.number.already.use";
 }
