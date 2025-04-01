@@ -58,4 +58,5 @@ public class MessageKeys {
             "shipping.date.must.be.greater.than.order.date";
 
     public static final String UNAUTHORIZED = "unauthorized";
+    public static final String USER_DETAILS_FETCHED = "user.details.fetched";
 }

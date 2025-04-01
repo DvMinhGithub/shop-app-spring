@@ -34,10 +34,11 @@ public class JwtUtils {
 
         Map<String, Object> claims = new HashMap<>();
         claims.put(PHONE_NUMBER, user.getPhoneNumber());
+        claims.put("userId", user.getId());
 
         return Jwts.builder()
                 .setSubject(user.getPhoneNumber())
-                .claim(PHONE_NUMBER, user.getPhoneNumber())
+                .addClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)

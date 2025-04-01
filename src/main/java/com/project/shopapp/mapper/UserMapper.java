@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 
 import com.project.shopapp.model.dto.request.UserCreateRequest;
 import com.project.shopapp.model.dto.request.UserLoginRequest;
+import com.project.shopapp.model.dto.response.UserResponse;
 import com.project.shopapp.model.entity.User;
 
 @Mapper(componentModel = "spring")
@@ -15,4 +16,6 @@ public interface UserMapper {
     User toUser(UserCreateRequest request);
 
     UserLoginRequest toUser(UserLoginRequest request);
+
+    UserResponse toUserResponse(User user);
 }

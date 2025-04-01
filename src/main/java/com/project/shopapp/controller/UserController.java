@@ -1,6 +1,7 @@
 package com.project.shopapp.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,7 @@ import com.project.shopapp.model.dto.request.UserCreateRequest;
 import com.project.shopapp.model.dto.request.UserLoginRequest;
 import com.project.shopapp.model.dto.response.ApiResponse;
 import com.project.shopapp.model.dto.response.LoginResponse;
+import com.project.shopapp.model.dto.response.UserResponse;
 import com.project.shopapp.model.entity.User;
 import com.project.shopapp.service.impl.UserServiceImpl;
 import com.project.shopapp.utils.MessageKeys;
@@ -42,5 +44,13 @@ public class UserController {
                 HttpStatus.CREATED.value(),
                 messageUtils.getMessage(MessageKeys.REGISTRATION_SUCCESSFUL),
                 userService.createUser(request));
+    }
+
+    @GetMapping("/details")
+    public ApiResponse<UserResponse> getUserDetails() {
+        return new ApiResponse<>(
+                HttpStatus.OK.value(),
+                messageUtils.getMessage(MessageKeys.USER_DETAILS_FETCHED),
+                userService.getUserDetails());
     }
 }

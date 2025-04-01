@@ -12,11 +12,13 @@ import com.project.shopapp.mapper.UserMapper;
 import com.project.shopapp.model.dto.request.UserCreateRequest;
 import com.project.shopapp.model.dto.request.UserLoginRequest;
 import com.project.shopapp.model.dto.response.LoginResponse;
+import com.project.shopapp.model.dto.response.UserResponse;
 import com.project.shopapp.model.entity.Role;
 import com.project.shopapp.model.entity.User;
 import com.project.shopapp.model.enums.UserRole;
 import com.project.shopapp.repository.RoleRepository;
 import com.project.shopapp.repository.UserRepository;
+import com.project.shopapp.security.CustomUserDetailsService;
 import com.project.shopapp.security.jwt.JwtUtils;
 import com.project.shopapp.service.UserService;
 import com.project.shopapp.utils.MessageKeys;
@@ -36,6 +38,7 @@ public class UserServiceImpl implements UserService {
     JwtUtils jwtUtil;
     MessageUtils messageUtils;
     AuthenticationManager authenticationManager;
+    CustomUserDetailsService customUserDetailsService;
 
     @Override
     public User createUser(UserCreateRequest request) {
@@ -49,6 +52,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userMapper.toUser(request);
         user.setRole(role);
+        user.setActive(true);
         if (request.getGoogleAccountId() == 0 || request.getFacebookAccountId() == 0) {
             String password = passwordEncoder.encode(request.getPassword());
             user.setPassword(password);
@@ -73,5 +77,15 @@ public class UserServiceImpl implements UserService {
                 new UsernamePasswordAuthenticationToken(phoneNumber, password);
         authenticationManager.authenticate(authenticationToken);
         return new LoginResponse(jwtUtil.generateToken(user));
+    }
+
+    @Override
+    public UserResponse getUserDetails() {
+        Long userId = customUserDetailsService.getCurrentUserId();
+
+        return userRepository
+                .findById(userId)
+                .map(userMapper::toUserResponse)
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.USER_NOT_FOUND)));
     }
 }
