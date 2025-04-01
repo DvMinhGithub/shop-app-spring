@@ -3,10 +3,12 @@ package com.project.shopapp.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.shopapp.model.dto.request.UpdateUserRequest;
 import com.project.shopapp.model.dto.request.UserCreateRequest;
 import com.project.shopapp.model.dto.request.UserLoginRequest;
 import com.project.shopapp.model.dto.response.ApiResponse;
@@ -52,5 +54,14 @@ public class UserController {
                 HttpStatus.OK.value(),
                 messageUtils.getMessage(MessageKeys.USER_DETAILS_FETCHED),
                 userService.getUserDetails());
+    }
+
+    @PutMapping("/update")
+    public ApiResponse<Void> updateUser(@RequestBody @Valid UpdateUserRequest request) {
+        userService.updateUser(request);
+        return ApiResponse.<Void>builder()
+                .code(HttpStatus.OK.value())
+                .message(messageUtils.getMessage(MessageKeys.USER_UPDATED))
+                .build();
     }
 }
