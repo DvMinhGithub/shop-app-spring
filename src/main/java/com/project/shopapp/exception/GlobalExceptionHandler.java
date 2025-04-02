@@ -18,14 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
     private final MessageUtils messageUtils;
-    private static final String BASE_MESSAGE = "An error occurred";
+    private static final String BASE_MESSAGE = "An error occurred ";
 
     @ExceptionHandler(value = RuntimeException.class)
     public ResponseEntity<ApiResponse<Void>> handleRuntimeException(RuntimeException e) {
-        log.error(BASE_MESSAGE, e);
-        String baseMessage = messageUtils.getMessage(MessageKeys.ERROR_INTERNAL_SERVER);
         log.error("Detailed error message: {}", e.getMessage());
-        ApiResponse<Void> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), baseMessage, null);
+        ApiResponse<Void> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), null);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
@@ -34,8 +32,8 @@ public class GlobalExceptionHandler {
         log.error(BASE_MESSAGE, e);
         String baseMessage = messageUtils.getMessage(MessageKeys.ERROR_INVALID_REQUEST);
         String errorMessage = e.getBindingResult().getFieldError().getDefaultMessage();
-        ApiResponse<Void> response =
-                new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), baseMessage + errorMessage, null);
+        ApiResponse<Void> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), baseMessage + errorMessage,
+                null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
