@@ -3,6 +3,9 @@ package com.project.shopapp.service.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,6 +88,14 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findAllByUserId(userId).stream()
                 .map(orderMapper::toOrderResponse)
                 .toList();
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Page<OrderResponse> findAllByKeyword(String keyword, Pageable pageable) {
+        Page<OrderResponse> orderResponses =
+                orderRepository.findAllByKeyword(keyword, pageable).map(orderMapper::toOrderResponse);
+        return orderResponses;
     }
 
     @Override

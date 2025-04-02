@@ -2,13 +2,17 @@ package com.project.shopapp.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import com.project.shopapp.model.dto.request.OrderRequest;
 import com.project.shopapp.model.dto.response.ApiResponse;
 import com.project.shopapp.model.dto.response.OrderResponse;
-import com.project.shopapp.service.impl.OrderServiceImpl;
+import com.project.shopapp.service.OrderService;
 import com.project.shopapp.utils.MessageKeys;
 import com.project.shopapp.utils.MessageUtils;
 
@@ -21,7 +25,7 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 public class OrderController {
-    OrderServiceImpl orderService;
+    OrderService orderService;
     MessageUtils messageUtils;
 
     @PostMapping
@@ -40,6 +44,18 @@ public class OrderController {
                 .code(HttpStatus.OK.value())
                 .message(messageUtils.getMessage(MessageKeys.ORDER_LIST_BY_USER_SUCCESS))
                 .result(orderService.findByUserId(userId))
+                .build();
+    }
+
+    @GetMapping("/all")
+    public ApiResponse<Page<OrderResponse>> searchOrders(
+            @RequestParam(defaultValue = "", name = "keyword") String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        return ApiResponse.<Page<OrderResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .result(orderService.findAllByKeyword(keyword, pageable))
                 .build();
     }
 
