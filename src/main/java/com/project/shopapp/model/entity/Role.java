@@ -1,5 +1,7 @@
 package com.project.shopapp.model.entity;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +23,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

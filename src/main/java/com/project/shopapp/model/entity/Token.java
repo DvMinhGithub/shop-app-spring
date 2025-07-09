@@ -27,7 +27,7 @@ public class Token implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String token;
+    String tokenValue;
     String tokenType;
     String email;
     LocalDateTime expiryDate;

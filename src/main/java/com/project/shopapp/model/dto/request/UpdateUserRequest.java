@@ -18,7 +18,7 @@ public class UpdateUserRequest {
     private String fullName;
 
     @NotBlank(message = "Phone number is required")
-    @Pattern(regexp = "0[0-9]{9}")
+    @Pattern(regexp = "0\\d{9}")
     private String phoneNumber;
 
     private String address;
