@@ -58,4 +58,5 @@ file:
 
 jwt:
   secret: '3q2+7w==e3r5t6y7u8i9o0p1a2s3d4f5g6h7j8k9l0z1x2c3v4b5n6m'
+  #  unit in milliseconds
   expiration: 86400000

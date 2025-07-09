@@ -19,9 +19,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtUtils {
 
-    // unit in milliseconds
     @Value("${jwt.expiration}")
-    private int expiration;
+    private Long expiration;
 
     @Value("${jwt.secret}")
     private String jwtSecret;

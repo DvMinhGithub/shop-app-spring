@@ -76,6 +76,9 @@ public class FileServiceImpl implements FileService {
     }
 
     private String sanitizeFilename(String filename) {
+        if (filename == null) {
+            return "";
+        }
         return filename.replaceAll("[^a-zA-Z0-9.-]", "_");
     }
 }

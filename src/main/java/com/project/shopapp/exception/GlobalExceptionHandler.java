@@ -32,8 +32,8 @@ public class GlobalExceptionHandler {
         log.error(BASE_MESSAGE, e);
         String baseMessage = messageUtils.getMessage(MessageKeys.ERROR_INVALID_REQUEST);
         String errorMessage = e.getBindingResult().getFieldError().getDefaultMessage();
-        ApiResponse<Void> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), baseMessage + errorMessage,
-                null);
+        ApiResponse<Void> response =
+                new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), baseMessage + errorMessage, null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 

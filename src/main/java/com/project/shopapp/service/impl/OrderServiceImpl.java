@@ -93,9 +93,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @PreAuthorize("hasAuthority('ADMIN')")
     public Page<OrderResponse> findAllByKeyword(String keyword, Pageable pageable) {
-        Page<OrderResponse> orderResponses =
-                orderRepository.findAllByKeyword(keyword, pageable).map(orderMapper::toOrderResponse);
-        return orderResponses;
+        return orderRepository.findAllByKeyword(keyword, pageable).map(orderMapper::toOrderResponse);
     }
 
     @Override

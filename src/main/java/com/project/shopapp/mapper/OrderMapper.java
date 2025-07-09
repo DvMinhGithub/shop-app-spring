@@ -8,7 +8,7 @@ import com.project.shopapp.model.dto.request.OrderRequest;
 import com.project.shopapp.model.dto.response.OrderResponse;
 import com.project.shopapp.model.entity.Order;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = OrderDetailMapper.class)
 public interface OrderMapper {
 
     @Mapping(target = "id", ignore = true)

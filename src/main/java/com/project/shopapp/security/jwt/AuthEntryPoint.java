@@ -15,8 +15,10 @@ import com.project.shopapp.utils.MessageUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class AuthEntryPoint implements AuthenticationEntryPoint {
     private final MessageUtils messageUtils;
 
@@ -28,6 +30,7 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
     public void commence(
             HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
             throws IOException, ServletException {
+        log.error("Unauthorized error: {}", authException.getMessage());
         response.setStatus(401);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
