@@ -111,3 +111,28 @@ ADD FOREIGN KEY (order_id) REFERENCES orders(id);
 
 ALTER TABLE order_details
 ADD FOREIGN KEY (product_id) REFERENCES products(id);
+
+-- CARTS
+
+CREATE TABLE carts (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT UNIQUE,
+    created_at DATETIME,
+    updated_at DATETIME
+);
+
+CREATE TABLE cart_items (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    cart_id BIGINT,
+    product_id BIGINT,
+    quantity BIGINT NOT NULL
+);
+
+ALTER TABLE carts
+ADD FOREIGN KEY (user_id) REFERENCES users(id);
+
+ALTER TABLE cart_items
+ADD FOREIGN KEY (cart_id) REFERENCES carts(id);
+
+ALTER TABLE cart_items
+ADD FOREIGN KEY (product_id) REFERENCES products(id);

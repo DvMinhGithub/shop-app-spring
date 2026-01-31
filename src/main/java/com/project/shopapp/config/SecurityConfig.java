@@ -34,6 +34,7 @@ public class SecurityConfig {
     private static final String CATEGORY_ENDPOINTS = "/categories/**";
     private static final String ORDER_ENDPOINTS = "/orders/**";
     private static final String ORDER_DETAIL_ENDPOINTS = "/order-details/**";
+    private static final String CART_ENDPOINTS = "/cart/**";
 
     private static final String[] PUBLIC_POST_ENDPOINTS = {"/users/login", "/users/register", "/files/**"};
 
@@ -108,6 +109,16 @@ public class SecurityConfig {
                 .hasAuthority(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.DELETE, ORDER_DETAIL_ENDPOINTS)
                 .hasAuthority(UserRole.ADMIN.name())
+
+                // Cart
+                .requestMatchers(HttpMethod.GET, CART_ENDPOINTS)
+                .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
+                .requestMatchers(HttpMethod.POST, CART_ENDPOINTS)
+                .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
+                .requestMatchers(HttpMethod.PUT, CART_ENDPOINTS)
+                .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
+                .requestMatchers(HttpMethod.DELETE, CART_ENDPOINTS)
+                .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
                 .anyRequest()
                 .authenticated();
     }

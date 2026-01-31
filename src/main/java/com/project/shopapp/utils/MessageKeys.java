@@ -51,6 +51,15 @@ public class MessageKeys {
     public static final String ORDER_DETAIL_DELETE_SUCCESS = "order.detail.delete.success";
     public static final String ORDER_DETAIL_NOT_FOUND = "order.detail.not.found";
 
+    public static final String CART_GET_SUCCESS = "cart.get.success";
+    public static final String CART_ITEM_ADD_SUCCESS = "cart.item.add.success";
+    public static final String CART_ITEM_UPDATE_SUCCESS = "cart.item.update.success";
+    public static final String CART_ITEM_DELETE_SUCCESS = "cart.item.delete.success";
+    public static final String CART_CHECKOUT_SUCCESS = "cart.checkout.success";
+    public static final String CART_NOT_FOUND = "cart.not.found";
+    public static final String CART_EMPTY = "cart.empty";
+    public static final String CART_ITEM_NOT_FOUND = "cart.item.not.found";
+
     public static final String FILE_IS_EMPTY = "file.is.empty";
     public static final String FILE_UPLOAD_FAILED = "file.upload.failed";
 
