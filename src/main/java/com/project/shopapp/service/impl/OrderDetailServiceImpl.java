@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.project.shopapp.dto.request.OrderDetailRequest;
+import com.project.shopapp.dto.response.OrderDetailResponse;
 import com.project.shopapp.exception.DataNotFoundException;
 import com.project.shopapp.mapper.OrderDetailMapper;
-import com.project.shopapp.model.dto.request.OrderDetailRequest;
-import com.project.shopapp.model.dto.response.OrderDetailResponse;
 import com.project.shopapp.model.entity.Order;
 import com.project.shopapp.model.entity.OrderDetail;
 import com.project.shopapp.model.entity.Product;

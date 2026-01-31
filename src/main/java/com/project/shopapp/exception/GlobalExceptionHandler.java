@@ -6,7 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.project.shopapp.model.dto.response.ApiResponse;
+import com.project.shopapp.dto.response.ApiResponse;
 import com.project.shopapp.utils.MessageKeys;
 import com.project.shopapp.utils.MessageUtils;
 

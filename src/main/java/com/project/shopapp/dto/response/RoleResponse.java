@@ -1,6 +1,4 @@
-package com.project.shopapp.model.dto.response;
-
-import com.project.shopapp.model.entity.Product;
+package com.project.shopapp.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,12 +13,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class OrderDetailResponse {
+public class RoleResponse {
     Long id;
-    Long orderId;
-    Product product;
-    Float price;
-    Long quantity;
-    Long totalMoney;
-    String color;
+    String name;
 }

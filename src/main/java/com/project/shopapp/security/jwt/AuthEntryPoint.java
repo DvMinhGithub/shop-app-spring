@@ -8,7 +8,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.shopapp.model.dto.response.ApiResponse;
+import com.project.shopapp.dto.response.ApiResponse;
 import com.project.shopapp.utils.MessageKeys;
 import com.project.shopapp.utils.MessageUtils;
 

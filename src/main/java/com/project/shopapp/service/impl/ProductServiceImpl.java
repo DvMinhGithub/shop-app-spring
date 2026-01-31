@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.project.shopapp.dto.request.ProductRequest;
+import com.project.shopapp.dto.response.ProductListResponse;
+import com.project.shopapp.dto.response.ProductResponse;
 import com.project.shopapp.exception.DataNotFoundException;
 import com.project.shopapp.exception.ImageUploadException;
 import com.project.shopapp.mapper.ProductMapper;
-import com.project.shopapp.model.dto.request.ProductRequest;
-import com.project.shopapp.model.dto.response.ProductListResponse;
-import com.project.shopapp.model.dto.response.ProductResponse;
 import com.project.shopapp.model.entity.Category;
 import com.project.shopapp.model.entity.Product;
 import com.project.shopapp.model.entity.ProductImage;

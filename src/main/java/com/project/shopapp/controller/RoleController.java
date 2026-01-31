@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.shopapp.model.dto.request.RoleRequest;
-import com.project.shopapp.model.dto.response.ApiResponse;
+import com.project.shopapp.dto.request.RoleRequest;
+import com.project.shopapp.dto.response.ApiResponse;
 import com.project.shopapp.model.entity.Role;
 import com.project.shopapp.service.impl.RoleServiceImpl;
 import com.project.shopapp.utils.MessageKeys;

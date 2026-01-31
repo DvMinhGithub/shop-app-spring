@@ -4,8 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import com.project.shopapp.model.dto.request.OrderRequest;
-import com.project.shopapp.model.dto.response.OrderResponse;
+import com.project.shopapp.dto.request.OrderRequest;
+import com.project.shopapp.dto.response.OrderResponse;
 import com.project.shopapp.model.entity.Order;
 
 @Mapper(componentModel = "spring", uses = OrderDetailMapper.class)

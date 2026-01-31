@@ -7,8 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import com.project.shopapp.model.dto.request.ProductRequest;
-import com.project.shopapp.model.dto.response.ProductResponse;
+import com.project.shopapp.dto.request.ProductRequest;
+import com.project.shopapp.dto.response.ProductResponse;
 import com.project.shopapp.model.entity.Product;
 import com.project.shopapp.model.entity.ProductImage;
 

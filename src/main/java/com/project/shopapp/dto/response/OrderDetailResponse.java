@@ -1,6 +1,6 @@
-package com.project.shopapp.model.dto.response;
+package com.project.shopapp.dto.response;
 
-import java.util.List;
+import com.project.shopapp.model.entity.Product;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,12 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class ProductListResponse {
-    List<ProductResponse> products;
-    int totalPages;
+public class OrderDetailResponse {
+    Long id;
+    Long orderId;
+    Product product;
+    Float price;
+    Long quantity;
+    Long totalMoney;
+    String color;
 }

@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.project.shopapp.model.dto.request.OrderRequest;
-import com.project.shopapp.model.dto.response.OrderResponse;
+import com.project.shopapp.dto.request.OrderRequest;
+import com.project.shopapp.dto.response.OrderResponse;
 
 public interface OrderService {
     OrderResponse createOrder(OrderRequest request);

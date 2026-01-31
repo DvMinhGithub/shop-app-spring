@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.project.shopapp.dto.request.RoleRequest;
 import com.project.shopapp.exception.DataNotFoundException;
 import com.project.shopapp.exception.DuplicateEntryException;
-import com.project.shopapp.model.dto.request.RoleRequest;
 import com.project.shopapp.model.entity.Role;
 import com.project.shopapp.repository.RoleRepository;
 import com.project.shopapp.service.RoleService;

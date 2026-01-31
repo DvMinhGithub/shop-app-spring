@@ -1,4 +1,6 @@
-package com.project.shopapp.model.dto.response;
+package com.project.shopapp.dto.response;
+
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +15,11 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class RoleResponse {
+public class ProductResponse {
     Long id;
     String name;
+    String description;
+    Double price;
+    List<String> thumbnail;
+    Long categoryId;
 }

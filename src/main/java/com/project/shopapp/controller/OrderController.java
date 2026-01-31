@@ -9,9 +9,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.project.shopapp.model.dto.request.OrderRequest;
-import com.project.shopapp.model.dto.response.ApiResponse;
-import com.project.shopapp.model.dto.response.OrderResponse;
+import com.project.shopapp.dto.request.OrderRequest;
+import com.project.shopapp.dto.response.ApiResponse;
+import com.project.shopapp.dto.response.OrderResponse;
 import com.project.shopapp.service.OrderService;
 import com.project.shopapp.utils.MessageKeys;
 import com.project.shopapp.utils.MessageUtils;

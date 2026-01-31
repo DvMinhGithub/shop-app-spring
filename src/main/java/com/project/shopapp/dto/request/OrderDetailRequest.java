@@ -1,4 +1,4 @@
-package com.project.shopapp.model.dto.request;
+package com.project.shopapp.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

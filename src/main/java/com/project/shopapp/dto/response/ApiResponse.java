@@ -1,4 +1,4 @@
-package com.project.shopapp.model.dto.response;
+package com.project.shopapp.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
