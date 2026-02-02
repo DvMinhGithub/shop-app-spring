@@ -1,13 +1,18 @@
 package com.project.shopapp.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.project.shopapp.dto.request.CartCheckoutRequest;
 import com.project.shopapp.dto.request.CartItemAddRequest;
+import com.project.shopapp.dto.request.CartItemMergeRequest;
 import com.project.shopapp.dto.request.CartItemRequest;
 import com.project.shopapp.dto.request.CartItemUpdateRequest;
 import com.project.shopapp.dto.request.OrderRequest;
@@ -96,6 +101,54 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.CART_ITEM_NOT_FOUND)));
 
         cartItemRepository.delete(cartItem);
+    }
+
+    @Override
+    @Transactional
+    public CartResponse mergeCart(Long userId, List<CartItemMergeRequest> items) {
+        if (items == null || items.isEmpty()) {
+            return getCart(userId);
+        }
+
+        Cart cart = findOrCreateCart(userId);
+
+        List<CartItem> existingItems = cartItemRepository.findAllByCartId(cart.getId());
+        Map<Long, CartItem> existingByProductId = new HashMap<>();
+        for (CartItem item : existingItems) {
+            existingByProductId.put(item.getProduct().getId(), item);
+        }
+
+        Set<Long> productIds = new HashSet<>();
+        for (CartItemMergeRequest item : items) {
+            productIds.add(item.getProductId());
+        }
+
+        Map<Long, Product> productMap = new HashMap<>();
+        for (Product product : productRepository.findAllById(productIds)) {
+            productMap.put(product.getId(), product);
+        }
+
+        for (CartItemMergeRequest requestItem : items) {
+            Product product = productMap.get(requestItem.getProductId());
+            if (product == null) {
+                throw new DataNotFoundException(
+                        messageUtils.getMessage(MessageKeys.PRODUCT_NOT_FOUND, requestItem.getProductId()));
+            }
+
+            CartItem cartItem = existingByProductId.get(product.getId());
+            if (cartItem == null) {
+                cartItem = new CartItem();
+                cartItem.setCart(cart);
+                cartItem.setProduct(product);
+                cartItem.setQuantity(0L);
+                existingByProductId.put(product.getId(), cartItem);
+            }
+
+            cartItem.setQuantity(cartItem.getQuantity() + requestItem.getQuantity());
+            cartItemRepository.save(cartItem);
+        }
+
+        return toCartResponse(cartRepository.findById(cart.getId()).orElse(cart));
     }
 
     @Override

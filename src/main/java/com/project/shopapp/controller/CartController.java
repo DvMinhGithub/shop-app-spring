@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.shopapp.dto.request.CartCheckoutRequest;
 import com.project.shopapp.dto.request.CartItemAddRequest;
 import com.project.shopapp.dto.request.CartItemUpdateRequest;
+import com.project.shopapp.dto.request.CartMergeRequest;
 import com.project.shopapp.dto.response.ApiResponse;
 import com.project.shopapp.dto.response.CartResponse;
 import com.project.shopapp.dto.response.OrderResponse;
+import com.project.shopapp.security.CustomUserDetailsService;
 import com.project.shopapp.service.CartService;
 import com.project.shopapp.utils.MessageKeys;
 import com.project.shopapp.utils.MessageUtils;
@@ -30,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class CartController {
     private final CartService cartService;
     private final MessageUtils messageUtils;
+    private final CustomUserDetailsService userDetailsService;
 
     @GetMapping
     public ApiResponse<CartResponse> getCart(@RequestParam Long userId) {
@@ -46,6 +49,16 @@ public class CartController {
                 .code(HttpStatus.CREATED.value())
                 .message(messageUtils.getMessage(MessageKeys.CART_ITEM_ADD_SUCCESS))
                 .result(cartService.addItem(request))
+                .build();
+    }
+
+    @PostMapping("/merge")
+    public ApiResponse<CartResponse> mergeCart(@RequestBody @Valid CartMergeRequest request) {
+        Long userId = userDetailsService.getCurrentUserId();
+        return ApiResponse.<CartResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message(messageUtils.getMessage(MessageKeys.CART_ITEM_ADD_SUCCESS))
+                .result(cartService.mergeCart(userId, request.getItems()))
                 .build();
     }
 
