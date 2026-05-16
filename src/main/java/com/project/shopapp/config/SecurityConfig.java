@@ -32,14 +32,22 @@ public class SecurityConfig {
 
     private static final String PRODUCT_ENDPOINTS = "/products/**";
     private static final String CATEGORY_ENDPOINTS = "/categories/**";
+    private static final String ROLE_ENDPOINTS = "/roles/**";
     private static final String ORDER_ENDPOINTS = "/orders/**";
     private static final String ORDER_DETAIL_ENDPOINTS = "/order-details/**";
     private static final String CART_ENDPOINTS = "/cart/**";
+    private static final String USER_ENDPOINTS = "/users/**";
 
     private static final String[] PUBLIC_POST_ENDPOINTS = {"/users/login", "/users/register", "/files/**"};
 
     private static final String[] PUBLIC_GET_ENDPOINTS = {
-        PRODUCT_ENDPOINTS, CATEGORY_ENDPOINTS, "/roles/**", "/files/**"
+        PRODUCT_ENDPOINTS,
+        CATEGORY_ENDPOINTS,
+        ROLE_ENDPOINTS,
+        "/files/**",
+        "/v3/api-docs/**",
+        "/swagger-ui/**",
+        "/swagger-ui.html"
     };
 
     @Bean
@@ -72,9 +80,27 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, PUBLIC_GET_ENDPOINTS)
                 .permitAll()
 
+                // Users
+                .requestMatchers(HttpMethod.GET, "/users/details")
+                .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
+                .requestMatchers(HttpMethod.PUT, "/users/update")
+                .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
+                .requestMatchers(HttpMethod.GET, USER_ENDPOINTS)
+                .hasAuthority(UserRole.ADMIN.name())
+                .requestMatchers(HttpMethod.PATCH, USER_ENDPOINTS)
+                .hasAuthority(UserRole.ADMIN.name())
+
+                // Roles
+                .requestMatchers(HttpMethod.POST, ROLE_ENDPOINTS)
+                .hasAuthority(UserRole.ADMIN.name())
+                .requestMatchers(HttpMethod.PUT, ROLE_ENDPOINTS)
+                .hasAuthority(UserRole.ADMIN.name())
+                .requestMatchers(HttpMethod.DELETE, ROLE_ENDPOINTS)
+                .hasAuthority(UserRole.ADMIN.name())
+
                 // Categories
                 .requestMatchers(HttpMethod.GET, CATEGORY_ENDPOINTS)
-                .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
+                .permitAll()
                 .requestMatchers(HttpMethod.POST, CATEGORY_ENDPOINTS)
                 .hasAuthority(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.PUT, CATEGORY_ENDPOINTS)
@@ -91,8 +117,14 @@ public class SecurityConfig {
                 .hasAuthority(UserRole.ADMIN.name())
 
                 // Orders
+                .requestMatchers(HttpMethod.GET, "/orders/all")
+                .hasAuthority(UserRole.ADMIN.name())
+                .requestMatchers(HttpMethod.PATCH, "/orders/*/status")
+                .hasAuthority(UserRole.ADMIN.name())
+                .requestMatchers(HttpMethod.PATCH, "/orders/*/cancel")
+                .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
                 .requestMatchers(HttpMethod.POST, ORDER_ENDPOINTS)
-                .hasAnyAuthority(UserRole.USER.name())
+                .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
                 .requestMatchers(HttpMethod.GET, ORDER_ENDPOINTS)
                 .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
                 .requestMatchers(HttpMethod.PUT, ORDER_ENDPOINTS)
@@ -102,9 +134,9 @@ public class SecurityConfig {
 
                 // Order details
                 .requestMatchers(HttpMethod.POST, ORDER_DETAIL_ENDPOINTS)
-                .hasAuthority(UserRole.USER.name())
+                .hasAuthority(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.GET, ORDER_DETAIL_ENDPOINTS)
-                .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
+                .hasAuthority(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.PUT, ORDER_DETAIL_ENDPOINTS)
                 .hasAuthority(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.DELETE, ORDER_DETAIL_ENDPOINTS)

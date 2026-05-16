@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.shopapp.exception.DataNotFoundException;
 import com.project.shopapp.model.entity.User;
+import com.project.shopapp.model.enums.UserRole;
 import com.project.shopapp.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         return userDetails.getId();
+    }
+
+    public boolean isCurrentUserAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null
+                && authentication.getAuthorities().stream()
+                        .anyMatch(authority -> UserRole.ADMIN.name().equals(authority.getAuthority()));
     }
 }
