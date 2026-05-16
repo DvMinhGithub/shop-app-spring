@@ -7,9 +7,10 @@ import org.springframework.data.domain.Pageable;
 
 import com.project.shopapp.dto.request.OrderRequest;
 import com.project.shopapp.dto.response.OrderResponse;
+import com.project.shopapp.model.enums.OrderStatus;
 
 public interface OrderService {
-    OrderResponse createOrder(OrderRequest request);
+    OrderResponse createOrder(Long userId, OrderRequest request);
 
     List<OrderResponse> findByUserId(Long userId);
 
@@ -17,7 +18,13 @@ public interface OrderService {
 
     OrderResponse getOrder(Long id);
 
+    OrderResponse getOrderForUser(Long id, Long userId, boolean admin);
+
     OrderResponse updateOrder(Long id, OrderRequest request);
+
+    OrderResponse updateStatus(Long id, OrderStatus status);
+
+    OrderResponse cancelOrder(Long id, Long userId, boolean admin);
 
     void deleteOrder(Long id);
 }

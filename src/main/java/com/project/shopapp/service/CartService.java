@@ -12,13 +12,13 @@ import com.project.shopapp.dto.response.OrderResponse;
 public interface CartService {
     CartResponse getCart(Long userId);
 
-    CartResponse addItem(CartItemAddRequest request);
+    CartResponse addItem(Long userId, CartItemAddRequest request);
 
-    CartResponse updateItem(Long itemId, CartItemUpdateRequest request);
+    CartResponse updateItem(Long userId, Long itemId, CartItemUpdateRequest request);
 
-    void deleteItem(Long itemId);
+    void deleteItem(Long userId, Long itemId);
 
     CartResponse mergeCart(Long userId, List<CartItemMergeRequest> items);
 
-    OrderResponse checkout(CartCheckoutRequest request);
+    OrderResponse checkout(Long userId, CartCheckoutRequest request);
 }

@@ -38,7 +38,7 @@ import lombok.experimental.FieldDefaults;
 
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
+@FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class CartServiceImpl implements CartService {
     CartRepository cartRepository;
     CartItemRepository cartItemRepository;
@@ -55,8 +55,8 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public CartResponse addItem(CartItemAddRequest request) {
-        Cart cart = findOrCreateCart(request.getUserId());
+    public CartResponse addItem(Long userId, CartItemAddRequest request) {
+        Cart cart = findOrCreateCart(userId);
 
         Product product = productRepository
                 .findById(request.getProductId())
@@ -73,7 +73,9 @@ public class CartServiceImpl implements CartService {
                     return item;
                 });
 
-        cartItem.setQuantity(cartItem.getQuantity() + request.getQuantity());
+        Long newQuantity = cartItem.getQuantity() + request.getQuantity();
+        ensureStock(product, newQuantity);
+        cartItem.setQuantity(newQuantity);
         cartItemRepository.save(cartItem);
 
         return toCartResponse(cartRepository.findById(cart.getId()).orElse(cart));
@@ -81,10 +83,12 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public CartResponse updateItem(Long itemId, CartItemUpdateRequest request) {
+    public CartResponse updateItem(Long userId, Long itemId, CartItemUpdateRequest request) {
+        Cart cart = findOrCreateCart(userId);
         CartItem cartItem = cartItemRepository
-                .findById(itemId)
+                .findByIdAndCartId(itemId, cart.getId())
                 .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.CART_ITEM_NOT_FOUND)));
+        ensureStock(cartItem.getProduct(), request.getQuantity());
 
         cartItem.setQuantity(request.getQuantity());
         cartItemRepository.save(cartItem);
@@ -95,9 +99,10 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public void deleteItem(Long itemId) {
+    public void deleteItem(Long userId, Long itemId) {
+        Cart cart = findOrCreateCart(userId);
         CartItem cartItem = cartItemRepository
-                .findById(itemId)
+                .findByIdAndCartId(itemId, cart.getId())
                 .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.CART_ITEM_NOT_FOUND)));
 
         cartItemRepository.delete(cartItem);
@@ -144,7 +149,9 @@ public class CartServiceImpl implements CartService {
                 existingByProductId.put(product.getId(), cartItem);
             }
 
-            cartItem.setQuantity(cartItem.getQuantity() + requestItem.getQuantity());
+            Long newQuantity = cartItem.getQuantity() + requestItem.getQuantity();
+            ensureStock(product, newQuantity);
+            cartItem.setQuantity(newQuantity);
             cartItemRepository.save(cartItem);
         }
 
@@ -153,9 +160,9 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public OrderResponse checkout(CartCheckoutRequest request) {
+    public OrderResponse checkout(Long userId, CartCheckoutRequest request) {
         Cart cart = cartRepository
-                .findByUserId(request.getUserId())
+                .findByUserId(userId)
                 .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.CART_NOT_FOUND)));
 
         List<CartItem> items = cartItemRepository.findAllByCartId(cart.getId());
@@ -164,7 +171,7 @@ public class CartServiceImpl implements CartService {
         }
 
         OrderRequest orderRequest = new OrderRequest();
-        orderRequest.setUserId(request.getUserId());
+        orderRequest.setUserId(userId);
         orderRequest.setFullName(request.getFullName());
         orderRequest.setEmail(request.getEmail());
         orderRequest.setPhoneNumber(request.getPhoneNumber());
@@ -189,10 +196,17 @@ public class CartServiceImpl implements CartService {
         orderRequest.setCartItems(cartItems);
         orderRequest.setTotalMoney(totalMoney);
 
-        OrderResponse response = orderService.createOrder(orderRequest);
+        OrderResponse response = orderService.createOrder(userId, orderRequest);
         cartItemRepository.deleteAllByCartId(cart.getId());
 
         return response;
+    }
+
+    private void ensureStock(Product product, Long quantity) {
+        long stock = product.getStock() == null ? 0L : product.getStock();
+        if (quantity == null || stock < quantity) {
+            throw new DataNotFoundException(messageUtils.getMessage(MessageKeys.PRODUCT_OUT_OF_STOCK));
+        }
     }
 
     private Cart findOrCreateCart(Long userId) {
@@ -208,7 +222,7 @@ public class CartServiceImpl implements CartService {
     }
 
     private CartResponse toCartResponse(Cart cart) {
-        List<CartItem> items = cart.getItems() == null ? List.of() : cart.getItems();
+        List<CartItem> items = cart.getId() == null ? List.of() : cartItemRepository.findAllByCartId(cart.getId());
         List<CartItemResponse> responses = new ArrayList<>(items.size());
         long totalItems = 0;
         float totalMoney = 0;

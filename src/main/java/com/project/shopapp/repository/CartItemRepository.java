@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.project.shopapp.model.entity.CartItem;
 
@@ -16,5 +19,8 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
     List<CartItem> findAllByCartId(Long cartId);
 
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM CartItem ci WHERE ci.cart.id = :cartId")
     void deleteAllByCartId(Long cartId);
 }

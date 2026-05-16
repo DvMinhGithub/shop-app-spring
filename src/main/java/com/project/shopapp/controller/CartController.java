@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.shopapp.dto.request.CartCheckoutRequest;
@@ -35,7 +34,8 @@ public class CartController {
     private final CustomUserDetailsService userDetailsService;
 
     @GetMapping
-    public ApiResponse<CartResponse> getCart(@RequestParam Long userId) {
+    public ApiResponse<CartResponse> getCart() {
+        Long userId = userDetailsService.getCurrentUserId();
         return ApiResponse.<CartResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message(messageUtils.getMessage(MessageKeys.CART_GET_SUCCESS))
@@ -45,10 +45,11 @@ public class CartController {
 
     @PostMapping("/items")
     public ApiResponse<CartResponse> addItem(@RequestBody @Valid CartItemAddRequest request) {
+        Long userId = userDetailsService.getCurrentUserId();
         return ApiResponse.<CartResponse>builder()
                 .code(HttpStatus.CREATED.value())
                 .message(messageUtils.getMessage(MessageKeys.CART_ITEM_ADD_SUCCESS))
-                .result(cartService.addItem(request))
+                .result(cartService.addItem(userId, request))
                 .build();
     }
 
@@ -65,16 +66,18 @@ public class CartController {
     @PutMapping("/items/{itemId}")
     public ApiResponse<CartResponse> updateItem(
             @PathVariable Long itemId, @RequestBody @Valid CartItemUpdateRequest request) {
+        Long userId = userDetailsService.getCurrentUserId();
         return ApiResponse.<CartResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message(messageUtils.getMessage(MessageKeys.CART_ITEM_UPDATE_SUCCESS))
-                .result(cartService.updateItem(itemId, request))
+                .result(cartService.updateItem(userId, itemId, request))
                 .build();
     }
 
     @DeleteMapping("/items/{itemId}")
     public ApiResponse<Void> deleteItem(@PathVariable Long itemId) {
-        cartService.deleteItem(itemId);
+        Long userId = userDetailsService.getCurrentUserId();
+        cartService.deleteItem(userId, itemId);
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.NO_CONTENT.value())
                 .message(messageUtils.getMessage(MessageKeys.CART_ITEM_DELETE_SUCCESS))
@@ -83,10 +86,11 @@ public class CartController {
 
     @PostMapping("/checkout")
     public ApiResponse<OrderResponse> checkout(@RequestBody @Valid CartCheckoutRequest request) {
+        Long userId = userDetailsService.getCurrentUserId();
         return ApiResponse.<OrderResponse>builder()
                 .code(HttpStatus.CREATED.value())
                 .message(messageUtils.getMessage(MessageKeys.CART_CHECKOUT_SUCCESS))
-                .result(cartService.checkout(request))
+                .result(cartService.checkout(userId, request))
                 .build();
     }
 }

@@ -61,6 +61,7 @@ public class OrderDetailController {
 
     @DeleteMapping("/{orderDetailId}")
     public ApiResponse<Void> deleteOrderDetail(@PathVariable Long orderDetailId) {
+        orderDetailService.deleteOrderDetail(orderDetailId);
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.NO_CONTENT.value())
                 .message(messageUtils.getMessage(MessageKeys.ORDER_DETAIL_DELETE_SUCCESS))
