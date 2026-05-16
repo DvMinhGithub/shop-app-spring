@@ -1,5 +1,7 @@
 package com.project.shopapp.service.impl;
 
+import java.util.List;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,6 +14,7 @@ import com.project.shopapp.dto.response.LoginResponse;
 import com.project.shopapp.dto.response.UserResponse;
 import com.project.shopapp.exception.DataNotFoundException;
 import com.project.shopapp.exception.DuplicateEntryException;
+import com.project.shopapp.exception.ForbiddenException;
 import com.project.shopapp.exception.InvalidPasswordException;
 import com.project.shopapp.mapper.UserMapper;
 import com.project.shopapp.model.entity.Role;
@@ -48,7 +51,7 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateEntryException(messageUtils.getMessage(MessageKeys.USER_ALREADY_EXISTS));
         }
         Role role = roleRepository
-                .findByName(UserRole.USER.name())
+                .findByNameIgnoreCase(UserRole.USER.name())
                 .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.ROLE_NOT_FOUND)));
 
         User user = userMapper.toUser(request);
@@ -69,8 +72,11 @@ public class UserServiceImpl implements UserService {
                 .findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.USER_NOT_FOUND)));
 
-        if ((user.getGoogleAccountId() != 0 || user.getFacebookAccountId() != 0)
-                && !passwordEncoder.matches(password, user.getPassword())) {
+        if (!user.isActive()) {
+            throw new ForbiddenException(messageUtils.getMessage(MessageKeys.FORBIDDEN));
+        }
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidPasswordException(messageUtils.getMessage(MessageKeys.INVALID_PASSWORD));
         }
 
@@ -104,5 +110,19 @@ public class UserServiceImpl implements UserService {
 
         userMapper.updateUserFromRequest(request, user);
         userRepository.save(user);
+    }
+
+    @Override
+    public List<UserResponse> getUsers() {
+        return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
+    }
+
+    @Override
+    public UserResponse updateActive(Long id, boolean active) {
+        User user = userRepository
+                .findById(id)
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.USER_NOT_FOUND)));
+        user.setActive(active);
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 }

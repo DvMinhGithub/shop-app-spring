@@ -1,5 +1,7 @@
 package com.project.shopapp.service;
 
+import java.util.List;
+
 import com.project.shopapp.dto.request.UpdateUserRequest;
 import com.project.shopapp.dto.request.UserCreateRequest;
 import com.project.shopapp.dto.request.UserLoginRequest;
@@ -15,4 +17,8 @@ public interface UserService {
     UserResponse getUserDetails();
 
     void updateUser(UpdateUserRequest request);
+
+    List<UserResponse> getUsers();
+
+    UserResponse updateActive(Long id, boolean active);
 }
