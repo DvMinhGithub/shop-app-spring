@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.project.shopapp.model.enums.OrderStatus;
+import com.project.shopapp.model.enums.PaymentStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,6 +45,12 @@ public class OrderResponse {
     LocalDateTime shippingDate;
 
     String paymentMethod;
+
+    PaymentStatus paymentStatus;
+
+    LocalDateTime paidAt;
+
+    String transactionId;
 
     boolean active = true;
 

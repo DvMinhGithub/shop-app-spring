@@ -21,6 +21,7 @@ import com.project.shopapp.model.entity.OrderDetail;
 import com.project.shopapp.model.entity.Product;
 import com.project.shopapp.model.entity.User;
 import com.project.shopapp.model.enums.OrderStatus;
+import com.project.shopapp.model.enums.PaymentStatus;
 import com.project.shopapp.repository.OrderDetailRepository;
 import com.project.shopapp.repository.OrderRepository;
 import com.project.shopapp.repository.ProductRepository;
@@ -63,6 +64,7 @@ public class OrderServiceImpl implements OrderService {
         order.setShippingDate(shippingDate);
         order.setActive(true);
         order.setStatus(OrderStatus.PENDING);
+        order.setPaymentStatus(PaymentStatus.UNPAID);
 
         if (request.getCartItems() == null || request.getCartItems().isEmpty()) {
             throw new DataNotFoundException(messageUtils.getMessage(MessageKeys.CART_EMPTY));
