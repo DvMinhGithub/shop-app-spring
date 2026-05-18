@@ -33,6 +33,7 @@ public class SecurityConfig {
     private static final String PRODUCT_ENDPOINTS = "/products/**";
     private static final String CATEGORY_ENDPOINTS = "/categories/**";
     private static final String ORDER_ENDPOINTS = "/orders/**";
+    private static final String PAYMENT_ENDPOINTS = "/payments/**";
     private static final String ORDER_DETAIL_ENDPOINTS = "/order-details/**";
     private static final String CART_ENDPOINTS = "/cart/**";
 
@@ -99,6 +100,14 @@ public class SecurityConfig {
                 .hasAuthority(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.DELETE, ORDER_ENDPOINTS)
                 .hasAuthority(UserRole.ADMIN.name())
+
+                // Payments
+                .requestMatchers(HttpMethod.PATCH, "/payments/orders/*/status")
+                .hasAuthority(UserRole.ADMIN.name())
+                .requestMatchers(HttpMethod.GET, PAYMENT_ENDPOINTS)
+                .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
+                .requestMatchers(HttpMethod.POST, PAYMENT_ENDPOINTS)
+                .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
 
                 // Order details
                 .requestMatchers(HttpMethod.POST, ORDER_DETAIL_ENDPOINTS)

@@ -15,14 +15,20 @@ public interface OrderMapper {
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "active", ignore = true)
     @Mapping(target = "orderDetails", ignore = true)
+    @Mapping(target = "paidAt", ignore = true)
+    @Mapping(target = "paymentStatus", ignore = true)
     @Mapping(target = "trackingNumber", ignore = true)
+    @Mapping(target = "transactionId", ignore = true)
     Order toOrder(OrderRequest request);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "active", ignore = true)
     @Mapping(target = "orderDetails", ignore = true)
+    @Mapping(target = "paidAt", ignore = true)
+    @Mapping(target = "paymentStatus", ignore = true)
     @Mapping(target = "trackingNumber", ignore = true)
+    @Mapping(target = "transactionId", ignore = true)
     void updateOrderFromRequest(OrderRequest request, @MappingTarget Order order);
 
     @Mapping(target = "userId", source = "user.id")

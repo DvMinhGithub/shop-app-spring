@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.shopapp.model.enums.OrderStatus;
+import com.project.shopapp.model.enums.PaymentStatus;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -59,6 +60,13 @@ public class Order {
     LocalDateTime shippingDate;
     String trackingNumber;
     String paymentMethod;
+
+    @Enumerated(EnumType.STRING)
+    PaymentStatus paymentStatus = PaymentStatus.UNPAID;
+
+    LocalDateTime paidAt;
+    String transactionId;
+
     boolean active = true;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
