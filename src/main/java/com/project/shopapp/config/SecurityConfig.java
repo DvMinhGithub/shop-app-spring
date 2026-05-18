@@ -34,13 +34,21 @@ public class SecurityConfig {
     private static final String CATEGORY_ENDPOINTS = "/categories/**";
     private static final String ORDER_ENDPOINTS = "/orders/**";
     private static final String PAYMENT_ENDPOINTS = "/payments/**";
+    private static final String REVIEW_ENDPOINTS = "/reviews/**";
     private static final String ORDER_DETAIL_ENDPOINTS = "/order-details/**";
     private static final String CART_ENDPOINTS = "/cart/**";
 
     private static final String[] PUBLIC_POST_ENDPOINTS = {"/users/login", "/users/register", "/files/**"};
 
     private static final String[] PUBLIC_GET_ENDPOINTS = {
-        PRODUCT_ENDPOINTS, CATEGORY_ENDPOINTS, "/roles/**", "/files/**"
+        PRODUCT_ENDPOINTS,
+        CATEGORY_ENDPOINTS,
+        ROLE_ENDPOINTS,
+        "/files/**",
+        "/v3/api-docs/**",
+        "/swagger-ui/**",
+        "/swagger-ui.html",
+        "/reviews/products/**"
     };
 
     @Bean
@@ -107,6 +115,12 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, PAYMENT_ENDPOINTS)
                 .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
                 .requestMatchers(HttpMethod.POST, PAYMENT_ENDPOINTS)
+                .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
+
+                // Reviews
+                .requestMatchers(HttpMethod.GET, REVIEW_ENDPOINTS)
+                .permitAll()
+                .requestMatchers(HttpMethod.POST, REVIEW_ENDPOINTS)
                 .hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
 
                 // Order details
