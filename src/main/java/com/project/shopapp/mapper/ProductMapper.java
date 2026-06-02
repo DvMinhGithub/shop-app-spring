@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
 import com.project.shopapp.dto.request.ProductRequest;
@@ -18,6 +19,11 @@ public interface ProductMapper {
     @Mapping(target = "thumbnail", ignore = true)
     @Mapping(target = "category", ignore = true)
     Product toProduct(ProductRequest request);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "thumbnail", ignore = true)
+    @Mapping(target = "category", ignore = true)
+    void updateProductFromRequest(ProductRequest request, @MappingTarget Product product);
 
     @Mapping(target = "thumbnail", source = "thumbnail", qualifiedByName = "productImageToStringList")
     @Mapping(target = "categoryId", source = "category.id")

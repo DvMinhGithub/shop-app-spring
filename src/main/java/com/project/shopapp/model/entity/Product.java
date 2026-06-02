@@ -38,6 +38,7 @@ public class Product {
 
     String description;
     Float price;
+    Long stock = 0L;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference

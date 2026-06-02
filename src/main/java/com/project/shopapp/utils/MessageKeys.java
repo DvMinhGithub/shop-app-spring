@@ -36,13 +36,19 @@ public class MessageKeys {
     public static final String PRODUCT_GENERATE_ERROR = "product.generate.error";
     public static final String PRODUCT_NOT_FOUND = "product.not.found";
     public static final String PRODUCT_IMAGE_MAX = "product.image.max";
+    public static final String PRODUCT_IMAGE_NOT_FOUND = "product.image.not.found";
+    public static final String PRODUCT_IMAGE_DELETE_SUCCESS = "product.image.delete.success";
+    public static final String PRODUCT_OUT_OF_STOCK = "product.out.of.stock";
 
     public static final String ORDER_CREATE_SUCCESS = "order.create.success";
     public static final String ORDER_LIST_BY_USER_SUCCESS = "order.list.by.user.success";
     public static final String ORDER_DETAIL_SUCCESS = "order.detail.success";
     public static final String ORDER_UPDATE_SUCCESS = "order.update.success";
     public static final String ORDER_DELETE_SUCCESS = "order.delete.success";
+    public static final String ORDER_CANCEL_SUCCESS = "order.cancel.success";
+    public static final String ORDER_STATUS_UPDATE_SUCCESS = "order.status.update.success";
     public static final String ORDER_NOT_FOUND = "order.not.found";
+    public static final String ORDER_STATUS_INVALID = "order.status.invalid";
 
     public static final String ORDER_DETAIL_CREATE_SUCCESS = "order.detail.create.success";
     public static final String ORDER_DETAIL_GET_SUCCESS = "order.detail.get.success";
@@ -60,6 +66,8 @@ public class MessageKeys {
     public static final String CART_EMPTY = "cart.empty";
     public static final String CART_ITEM_NOT_FOUND = "cart.item.not.found";
 
+    public static final String FORBIDDEN = "forbidden";
+
     public static final String FILE_IS_EMPTY = "file.is.empty";
     public static final String FILE_UPLOAD_FAILED = "file.upload.failed";
 
@@ -69,5 +77,7 @@ public class MessageKeys {
     public static final String UNAUTHORIZED = "unauthorized";
     public static final String USER_DETAILS_FETCHED = "user.details.fetched";
     public static final String USER_UPDATED = "user.updated";
+    public static final String USER_LIST_SUCCESS = "user.list.success";
+    public static final String USER_ACTIVE_UPDATED = "user.active.updated";
     public static final String PHONE_NUMBER_ALREADY_USE = "phone.number.already.use";
 }

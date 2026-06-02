@@ -19,7 +19,9 @@ public interface ProductService {
 
     ProductListResponse getAllProducts(Long categoryId, String keyword, Pageable pageable);
 
-    Product updateProduct(Long id, ProductRequest request);
+    Product updateProduct(Long id, ProductRequest request) throws IOException;
 
     void deleteProduct(Long id);
+
+    void deleteProductImage(Long imageId);
 }

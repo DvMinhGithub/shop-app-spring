@@ -18,4 +18,7 @@ import lombok.experimental.FieldDefaults;
 public class ProductListResponse {
     List<ProductResponse> products;
     int totalPages;
+    long totalItems;
+    int page;
+    int limit;
 }

@@ -52,6 +52,9 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = productMapper.toProduct(request);
         product.setCategory(category);
+        if (product.getStock() == null) {
+            product.setStock(0L);
+        }
 
         Product savedProduct = productRepository.save(product);
 
@@ -87,6 +90,9 @@ public class ProductServiceImpl implements ProductService {
         return ProductListResponse.builder()
                 .products(products.getContent())
                 .totalPages(products.getTotalPages())
+                .totalItems(products.getTotalElements())
+                .page(pageRequest.getPageNumber() + 1)
+                .limit(pageRequest.getPageSize())
                 .build();
     }
 
@@ -100,12 +106,32 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updateProduct(Long id, ProductRequest request) {
+    @Transactional
+    public Product updateProduct(Long id, ProductRequest request) throws IOException {
         Product product = productRepository
                 .findById(id)
                 .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.PRODUCT_NOT_FOUND)));
-        productMapper.toProduct(request);
-        return productRepository.save(product);
+
+        Category category = categoryRepository
+                .findById(request.getCategoryId())
+                .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.CATEGORY_NOT_FOUND)));
+
+        productMapper.updateProductFromRequest(request, product);
+        product.setCategory(category);
+        if (product.getStock() == null) {
+            product.setStock(0L);
+        }
+
+        Product savedProduct = productRepository.save(product);
+        List<ProductImage> newImages = createProductImages(savedProduct, request.getThumbnail());
+        if (!newImages.isEmpty()) {
+            if (savedProduct.getThumbnail() == null) {
+                savedProduct.setThumbnail(new ArrayList<>());
+            }
+            savedProduct.getThumbnail().addAll(newImages);
+        }
+
+        return savedProduct;
     }
 
     @Override
@@ -114,6 +140,15 @@ public class ProductServiceImpl implements ProductService {
                 .findById(id)
                 .orElseThrow(() -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.PRODUCT_NOT_FOUND)));
         productRepository.delete(product);
+    }
+
+    @Override
+    public void deleteProductImage(Long imageId) {
+        ProductImage image = productImageRepository
+                .findById(imageId)
+                .orElseThrow(
+                        () -> new DataNotFoundException(messageUtils.getMessage(MessageKeys.PRODUCT_IMAGE_NOT_FOUND)));
+        productImageRepository.delete(image);
     }
 
     private List<ProductImage> createProductImages(Product product, List<MultipartFile> files) throws IOException {

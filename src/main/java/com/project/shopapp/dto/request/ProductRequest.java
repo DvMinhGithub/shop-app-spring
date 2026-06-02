@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +33,11 @@ public class ProductRequest {
     @Max(value = 10000000, message = "Price must be less than 10000000")
     Double price;
 
+    @Min(value = 0, message = "Stock must be greater than or equal to 0")
+    Long stock;
+
     List<MultipartFile> thumbnail;
 
+    @NotNull(message = "Category ID is required")
     Long categoryId;
 }

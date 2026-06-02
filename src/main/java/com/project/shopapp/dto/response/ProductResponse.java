@@ -20,6 +20,7 @@ public class ProductResponse {
     String name;
     String description;
     Double price;
+    Long stock;
     List<String> thumbnail;
     Long categoryId;
 }
